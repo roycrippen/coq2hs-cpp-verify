@@ -48,18 +48,4 @@ std::string show(const std::vector<int> &vs)
   return res;
 }
 
-std::string show(const std::vector<std::vector<char>> &vs)
-{
-  std::string res = "{ ";
-  for (int i = 0; i < vs.size(); i++)
-  {
-    std::string str(vs[i].begin(), vs[i].end());
-    res += str + ", ";
-  }
-  res.pop_back();
-  res.pop_back();
-  res += " }";
-  return res;
-}
-
 } // namespace cn
