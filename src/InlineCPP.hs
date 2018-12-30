@@ -52,10 +52,12 @@ testEncodeDecode = [C.exp| void {
 -- brittany-disable-next-binding
 encode :: String -> IO [CInt]
 encode cs = do
+  -- create c-string to pass to cpp 
   let n = length cs
   (cStr, n_) <- newCStringLen cs
   -- putStrLn $ "n = " ++ show n ++ ", n_ = " ++ show n_
 
+  -- cpp code encode the c-string to a array of ints 
   arrayPtr <- [C.block| int* {
       std::string s = (std::string) $(char *cStr); 
       auto encoded_vec = cn::encode(s);
@@ -72,6 +74,7 @@ encode cs = do
       return arr;
     } |]
 
+  -- free allocated mewmory and return the list of ints
   free cStr
   peekArray n arrayPtr
 
@@ -82,6 +85,7 @@ decode xs = do
   -- create mutable vector that cpp block can reference
   vec <- V.thaw (V.fromList xs)
 
+  -- cpp code to decode list of ints
   cStr <- [C.block| char* {
       // rename input pointer to a more readable variable
       int* xs = $vec-ptr:(int *vec);
@@ -113,7 +117,7 @@ sumVec xs = do
   -- create mutable vector that cpp block can reference
   vec <- V.thaw (V.fromList xs)
 
-  -- sum the list 
+  -- cpp code to sum the list 
   n <- [C.block| int {
     int* xs = $vec-ptr:(int *vec);
     int len = $vec-len:vec;
