@@ -1,3 +1,5 @@
 .stack-work/
-coq2hs-cpp-bench.cabal
 *~
+.*.*.swp
+build/
+cpp/cmake-*
