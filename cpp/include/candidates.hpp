@@ -1,5 +1,7 @@
 #include <vector>
 
+using namespace std;
+
 namespace cn
 {
 int square(int a)
@@ -13,9 +15,9 @@ bool is_pythagorean_triple(int a, int b, int c)
 }
 
 // encode a string to a vector of ints
-std::vector<int> encode(std::string &cs)
+vector<int> encode(string &cs)
 {
-  std::vector<int> res = {};
+  vector<int> res = {};
   for (auto &c : cs)
   {
     res.push_back((int)c);
@@ -24,9 +26,9 @@ std::vector<int> encode(std::string &cs)
 }
 
 // decode an encoded vector of ints to a string
-std::string decode(std::vector<int> &xs)
+string decode(vector<int> &xs)
 {
-  std::string s = "";
+  string s = "";
   for (int x : xs)
   {
     s.push_back(x);
@@ -35,16 +37,43 @@ std::string decode(std::vector<int> &xs)
 }
 
 // pretty string of a vector if int
-std::string show(const std::vector<int> &vs)
+string show(const vector<int> &vs)
 {
-  std::string res = "{ ";
+  string res = "{ ";
   for (int i = 0; i < vs.size(); i++)
   {
-    res += std::to_string(vs[i]) + ", ";
+    res += to_string(vs[i]) + ", ";
   }
   res.pop_back();
   res.pop_back();
   res += " }";
+  return res;
+}
+
+// pretty string of a vector if uint8_t
+string show(const std::vector<uint8_t> &vs)
+{
+  string res = "{ ";
+  for (int i = 0; i < vs.size(); i++)
+  {
+    res += to_string(vs[i]) + ", ";
+  }
+  res.pop_back();
+  res.pop_back();
+  res += " }";
+  return res;
+}
+
+// XOR Encryption
+string applyXorCipher(string const &cs, string const &key)
+{
+  string res = cs;
+  auto mod = key.size() / sizeof(char);
+  for (int i = 0; i < cs.size(); i++)
+  {
+    auto c = key[i % mod];
+    res[i] = cs[i] ^ c;
+  }
   return res;
 }
 
