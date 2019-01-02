@@ -34,19 +34,11 @@ main = hspec $ do
             v `shouldBe` 1
         it "(3,4,6) is not a triplet" $ CPP.isTriple 3 4 6 >>= \v ->
             v `shouldBe` 0
-        -- it "encode 'abc 123'" $ CPP.encode "abc 123" >>= \v ->
-        --     v `shouldBe` [97, 98, 99, 32, 49, 50, 51]
-        -- it "decode [97, 98, 99, 32, 49, 50, 51]"
-        --     $   CPP.decode [97, 98, 99, 32, 49, 50, 51]
-        --     >>= \v -> v `shouldBe` "abc 123"
-        -- it "decode (encode 'abc 123')" $ do
-        --     v <- CPP.decode =<< CPP.encode "abc 123"
-        --     v `shouldBe` "abc 123"
-        it "applyXorCipher (ApplyXorCipher ...)"
+        it "quickcheck applyXorCipher (ApplyXorCipher s) == s"
             $ quickCheck prop_cppApplyXorCipher
     describe "Haskell checking CPP, HS_f() == CPP_f()" $ do
-        it "pythagorean triplets" $ quickCheck prop_pTriples
-        it "pythagorean triplets" $ quickCheck prop_pTriples
+        it "quickcheck pythagorean triplets" $ quickCheck prop_pTriples
+        it "quickcheck pythagorean triplets" $ quickCheck prop_pTriples
 
 flexList :: Arbitrary a => Gen [a]
 flexList = sized
@@ -77,10 +69,11 @@ prop_pTriples = forAll pTripleVals $ \(a, b, c) -> monadicIO $ do
     i <- run (CPP.isTriple a' b' c')
     assert (HS.isTriple a b c == (i == 1))
 
-prop_cppApplyXorCipher = forAll genSafeString $ \s -> monadicIO $ do
-    s1 <- run $ CPP.applyXorCipher s
-    s2 <- run $ CPP.applyXorCipher s1
-    assert $ s2 == s
+prop_cppApplyXorCipher = forAll genSafeString $ \s0 -> monadicIO $ do
+    let key = "some string key 1234"
+    s1 <- run $ CPP.applyXorCipher s0 key
+    s2 <- run $ CPP.applyXorCipher s1 key
+    assert $ s2 == s0
 
 genSafeChar :: Gen Char
 genSafeChar = elements [' ' .. '~']

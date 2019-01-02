@@ -6,15 +6,13 @@ module InlineCPP
   ( square
   , isTriple
   , testApplyXorCipher
-  , encode
-  , decode
   , sumVec
   , rangeList
   , applyXorCipher
   )
 where
 
-import           Data.Monoid                              ( (<>) )
+import           Data.Monoid                    ( (<>) )
 import           Control.Monad
 import qualified Data.Vector.Storable          as V
 import qualified Data.Vector.Storable.Mutable  as VM
@@ -51,98 +49,46 @@ testApplyXorCipher = [C.exp| void {
 
 -- encode string to a list of ints by calling cn::encode(...) cpp function
 -- brittany-disable-next-binding
-applyXorCipher :: String -> IO String
-applyXorCipher cs = do
+applyXorCipher :: String -> String -> IO String
+applyXorCipher cs key = do
   -- create c-string to pass to cpp 
-  let n = length cs
-  let nCInt = fromIntegral n :: CInt
-  (cStr, n_) <- newCStringLen cs
-  -- putStrLn $ "n = " ++ show n ++ ", n_ = " ++ show n_
+  let nCInt = fromIntegral (length cs) :: CInt
+  cStrIn <- newCString cs
+  cStrKey <- newCString key
 
-  -- cpp code to decode list of ints
-  cStr <- [C.block| char* {
-      // rename input pointer to a more readable variable
-      std::string s = (std::string) $(char *cStr);
+  -- cpp code to call cn::applyXorCipher(string, key)
+  cStrOut <- [C.block| char* {
+      // rename input pointer and n to a more readable names
+      char *cStrIn = $(char *cStrIn);
+      char *key = $(char *cStrKey);
       int n = $(int nCInt);
 
-      string key = "cipher key 123";
+      // copy *char to string 
+      // necessary because string might contain NULL
+      std::string s = "";
+      for (int i = 0; i < n; i++) {
+        s.push_back(cStrIn[i]);
+      }
+
       auto ds = cn::applyXorCipher(s, key);
 
       // convert decoded std::string to a char* and return it
       char *cstr = new char[n + 1];
-      std::strcpy(cstr, ds.c_str());
+      std::memcpy(cstr, ds.data(), n);
       return cstr;
     }|]
 
-  -- cout << "s = '" << s << "', ds = '" << ds << "', n = " << n << "\n";
-  -- extract CString into an IO String and cleanup allocated memory
-  res <- peekCStringLen (cStr, n)
-  free cStr
-  putStrLn $ "cs = " ++ show cs ++ ", res = " ++ show res
+  -- get the result string out of the pointer, cleanup memory and return
+  res <- peekCStringLen (cStrOut, length cs)
+  free cStrIn
+  free cStrOut
+  -- putStrLn $ "cs = " ++ show ( map fromEnum cs) ++
+  --          ", res = " ++ show ( map fromEnum res)
   return res
 
 
--- encode string to a list of ints by calling cn::encode(...) cpp function
--- brittany-disable-next-binding
-encode :: String -> IO [CInt]
-encode cs = do
-  -- create c-string to pass to cpp 
-  let n = length cs
-  (cStr, n_) <- newCStringLen cs
-  -- putStrLn $ "n = " ++ show n ++ ", n_ = " ++ show n_
-
-  -- cpp code encode the c-string to a array of ints 
-  arrayPtr <- [C.block| int* {
-      std::string s = (std::string) $(char *cStr); 
-      auto encoded_vec = cn::encode(s);
-
-      // int* arr = encoded_vec.data(); // did not work, first two values wrong
-      // int* arr = &encoded_vec[0];    // did not work, first two values wrong
-
-      int len = encoded_vec.size();
-      int* arr = new int[len];
-      for (int i = 0; i < len; i++) {
-        arr[i] = encoded_vec[i];
-      }
-
-      return arr;
-    } |]
-
-  -- free allocated mewmory and return the list of ints
-  free cStr
-  peekArray n arrayPtr
-
--- decode list of ints to a String by calling cn::decode(...) cpp function
--- brittany-disable-next-binding
-decode :: [CInt] -> IO String
-decode xs = do
-  -- create mutable vector that cpp block can reference
-  vec <- V.thaw (V.fromList xs)
-
-  -- cpp code to decode list of ints
-  cStr <- [C.block| char* {
-      // rename input pointer to a more readable variable
-      int* xs = $vec-ptr:(int *vec);
-      int len = $vec-len:vec;
-
-      // convert input pointer to a vector of int and decode
-      std::vector<int> encoded_vec;
-      for (int i = 0; i < len; i++) {
-        encoded_vec.push_back(xs[i]);
-      }
-      auto ds = cn::decode(encoded_vec);
-
-      // convert decoded std::string to a char* and return it
-      char *cstr = new char[ds.length() + 1];
-      std::strcpy(cstr, ds.c_str());
-      return cstr;
-    }|]
-
-  -- extract CString into an IO String and cleanup allocated memory
-  res <- peekCString cStr
-  _   <- V.freeze vec
-  free cStr
-  return res
+toIntList :: String -> [Int]
+toIntList = map fromEnum
 
 -- sum elements of a list
 -- brittany-disable-next-binding
