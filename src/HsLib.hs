@@ -1,3 +1,4 @@
+-- | Haskell equivalent functions of the CPP functions to be need to be validated for correctness.
 module HsLib
     ( square
     , isTriple
@@ -5,12 +6,21 @@ module HsLib
     )
 where
 
-square :: Int -> Int
+-- | Square a number.
+square :: Num a => a -> a
 square x = x * x
 
+-- | Test whether a, b and c form a  Pythagorean triple given that a < b < c.
+-- For example,
+--
+-- >>> isTrple 7 24 25
+-- True
+-- >>> isTriple 7 24 26
+-- False
 isTriple :: Int -> Int -> Int -> Bool
 isTriple a b c = square a + square b == square c
 
+-- | List of Pythagorean triples for c < 100.
 triples :: [(Int, Int, Int)]
 triples =
     [ (3 , 4 , 5)
