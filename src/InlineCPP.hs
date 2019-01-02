@@ -5,15 +5,17 @@
 module InlineCPP
   ( square
   , isTriple
-  , testEncodeDecode
+  , testApplyXorCipher
   , encode
   , decode
   , sumVec
   , rangeList
+  , applyXorCipher
   )
 where
 
 import           Data.Monoid                              ( (<>) )
+import           Control.Monad
 import qualified Data.Vector.Storable          as V
 import qualified Data.Vector.Storable.Mutable  as VM
 import           Foreign.C.Types
@@ -37,16 +39,48 @@ isTriple a b c =
    [C.exp| int { cn::is_pythagorean_triple($(int a), $(int b), $(int c)) } |]
 
 -- brittany-disable-next-binding
-testEncodeDecode :: IO ()
-testEncodeDecode = [C.exp| void {
-  std::string cs = "This is the test string...";
-  std::cout << "input string: '" << cs << "'\n";
+testApplyXorCipher :: IO ()
+testApplyXorCipher = [C.exp| void {
+    cout << "This is message from cpp std::cout.\n" ;
+    auto cs = "This is the test string...";
+    string key = "cipher key 123";
+    cout << "std::cout -> (cs, key): ('" << cs << "', '" << key << "')" << "'\n";
+    auto orig_str = cn::applyXorCipher(cn::applyXorCipher(cs, key), key);
+    cout << "std::cout -> applyXorCipher(applyXorCipher(cs, key), key): '" << orig_str << "'\n";
+  }|]
 
-  auto encoded_vec = cn::encode(cs);
-  std::cout << "encoded vector: " << cn::show(encoded_vec) << "\n";
+-- encode string to a list of ints by calling cn::encode(...) cpp function
+-- brittany-disable-next-binding
+applyXorCipher :: String -> IO String
+applyXorCipher cs = do
+  -- create c-string to pass to cpp 
+  let n = length cs
+  let nCInt = fromIntegral n :: CInt
+  (cStr, n_) <- newCStringLen cs
+  -- putStrLn $ "n = " ++ show n ++ ", n_ = " ++ show n_
 
-  auto ds = cn::decode(encoded_vec);
-  std::cout << "decoded string: '" << ds << "'\n";}|]
+  -- cpp code to decode list of ints
+  cStr <- [C.block| char* {
+      // rename input pointer to a more readable variable
+      std::string s = (std::string) $(char *cStr);
+      int n = $(int nCInt);
+
+      string key = "cipher key 123";
+      auto ds = cn::applyXorCipher(s, key);
+
+      // convert decoded std::string to a char* and return it
+      char *cstr = new char[n + 1];
+      std::strcpy(cstr, ds.c_str());
+      return cstr;
+    }|]
+
+  -- cout << "s = '" << s << "', ds = '" << ds << "', n = " << n << "\n";
+  -- extract CString into an IO String and cleanup allocated memory
+  res <- peekCStringLen (cStr, n)
+  free cStr
+  putStrLn $ "cs = " ++ show cs ++ ", res = " ++ show res
+  return res
+
 
 -- encode string to a list of ints by calling cn::encode(...) cpp function
 -- brittany-disable-next-binding

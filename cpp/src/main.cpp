@@ -15,14 +15,14 @@ int main(int argc, char *argv[])
   cout << "Is (" << a << ", " << b << ", " << c << ") a pythagorean triple: "
        << boolalpha << cn::is_pythagorean_triple(a, b, c) << "\n";
 
-  string cs = "This is the test string...";
-  cout << "input string: '" << cs << "'\n";
-  auto encoded_vec = cn::encode(cs);
-  cout << "encoded vector: " << cn::show(encoded_vec) << "\n";
-  auto ds = cn::decode(encoded_vec);
-  cout << "decoded string: '" << ds << "'\n";
+  // string cs = "This is the test string...";
+  // cout << "input string: '" << cs << "'\n";
+  // auto encoded_vec = cn::encode(cs);
+  // cout << "encoded vector: " << cn::show(encoded_vec) << "\n";
+  // auto ds = cn::decode(encoded_vec);
+  // cout << "decoded string: '" << ds << "'\n";
 
-  cs = "This is the test string...";
+  auto cs = "c=Gon^#c#&y";
   string key = "cipher key 123";
   cout << "key: '" << key << "'\n";
   cout << "input     string: '" << cs << "'\n";
