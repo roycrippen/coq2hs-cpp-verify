@@ -1,7 +1,7 @@
 # coq2hs-cpp-verify
 Proof of concept test bench to code compare functions implemented in Haskell and C++.
 
-requires haskell stack >= 1.9.8, gcc >= 5.0 or clang >= 3.8  
+requires haskell [stack](https://docs.haskellstack.org/en/stable/README/) >= 1.9.8 and (gcc >= 5.0 or clang >= 3.8)  
 
 ## Quick Start
 
@@ -37,7 +37,7 @@ stack ghci src/InlineCPP.hs --ghci-options='-fobject-code -O0'
 ```
 
 ## Concept 
-Extract Haskell a function (hsFunction) from a formal [Coq](https://coq.inria.fr/) proof that represents the specification of an existing C++ function (cppFunction).  The extracted Haskell function by definition will be verified as correct. This test bench represents an example of how to use Haskell, [inline-c-cpp](http://hackage.haskell.org/package/inline-c-cpp) and the property based testing tool [QuickCheck](http://hackage.haskell.org/package/QuickCheck) to verify that hsFunction and cppFunction produce identical results for the same inputs. 
+Extract a Haskell function (hsFunction) from a formal [Coq](https://coq.inria.fr/) proof that represents the specification of an existing C++ function (cppFunction).  The extracted Haskell function by definition will be verified as correct. This test bench represents an example of how to use [Haskell](https://www.haskell.org/), [inline-c-cpp](http://hackage.haskell.org/package/inline-c-cpp) and the property based testing tool [QuickCheck](http://hackage.haskell.org/package/QuickCheck) to verify that hsFunction and cppFunction produce identical results for the same inputs. 
 
 ## Example
 ### Haskell function
