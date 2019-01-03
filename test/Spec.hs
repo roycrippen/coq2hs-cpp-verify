@@ -2,11 +2,31 @@ module Main where
 
 import qualified InlineCPP                     as CPP
 import qualified HsLib                         as HS
-import           Test.Hspec
-import           Test.QuickCheck
-import           Test.QuickCheck.Monadic
+import           Test.Hspec                               ( shouldBe
+                                                          , describe
+                                                          , hspec
+                                                          , it
+                                                          )
+import           Test.QuickCheck                          ( Arbitrary
+                                                          , Gen
+                                                          , Property(..)
+                                                          , arbitrary
+                                                          , choose
+                                                          , elements
+                                                          , forAll
+                                                          , frequency
+                                                          , listOf
+                                                          , sized
+                                                          , suchThat
+                                                          , quickCheck
+                                                          , withMaxSuccess
+                                                          )
+import           Test.QuickCheck.Monadic                  ( monadicIO
+                                                          , run
+                                                          , assert
+                                                          )
 import           Foreign.C.Types
-import           Control.Monad
+import           Control.Monad                            ( (>=>) )
 
 main :: IO ()
 main = hspec $ do
@@ -20,6 +40,8 @@ main = hspec $ do
             HS.square 9 `shouldBe` 81
         it "(3,4,5) is     a triplet" $ HS.isTriple 3 4 5 `shouldBe` True
         it "(3,4,6) is NOT a triplet" $ HS.isTriple 3 4 6 `shouldBe` False
+        it "quickcheck: HS.applyXorCipher (HS.applyXorCipher s k) k == s"
+            $ quickCheck (withMaxSuccess 10000 prop_hsApplyXorCipher)
     describe "CPP Functions" $ do
         it "sqaure a negative integer" $ do
             CPP.square (-3) >>= \v -> v `shouldBe` 9
@@ -34,11 +56,13 @@ main = hspec $ do
             v `shouldBe` 1
         it "(3,4,6) is not a triplet" $ CPP.isTriple 3 4 6 >>= \v ->
             v `shouldBe` 0
-        it "quickcheck applyXorCipher (ApplyXorCipher s) == s"
-            $ quickCheck prop_cppApplyXorCipher
-    describe "Haskell checking CPP, HS_f() == CPP_f()" $ do
-        it "quickcheck pythagorean triplets" $ quickCheck prop_pTriples
-        it "quickcheck pythagorean triplets" $ quickCheck prop_pTriples
+        it "quickcheck: CPP.applyXorCipher (CPP.applyXorCipher s k) k == s"
+            $ quickCheck (withMaxSuccess 10000 prop_cppApplyXorCipher)
+    describe "Haskell checking CPP, HS.f args == CPP.f args" $ do
+        it "quickcheck: HS.isTriple a b c == CPP.isTriple a b c"
+            $ quickCheck prop_pTriples
+        it "quickcheck: HS.applyXorCipher s k == CPP.applyXorCipher s k"
+            $ quickCheck (withMaxSuccess 10000 prop_applyXorCipher)
 
 flexList :: Arbitrary a => Gen [a]
 flexList = sized
@@ -69,11 +93,23 @@ prop_pTriples = forAll pTripleVals $ \(a, b, c) -> monadicIO $ do
     i <- run (CPP.isTriple a' b' c')
     assert (HS.isTriple a b c == (i == 1))
 
+prop_cppApplyXorCipher :: Property
 prop_cppApplyXorCipher = forAll genSafeString $ \s0 -> monadicIO $ do
     let key = "some string key 1234"
     s1 <- run $ CPP.applyXorCipher s0 key
     s2 <- run $ CPP.applyXorCipher s1 key
     assert $ s2 == s0
+
+prop_hsApplyXorCipher :: Property
+prop_hsApplyXorCipher = forAll genSafeString $ \s -> monadicIO $ do
+    let key = "some string key 1234"
+    assert $ HS.applyXorCipher (HS.applyXorCipher s key) key == s
+
+prop_applyXorCipher :: Property
+prop_applyXorCipher = forAll genSafeString $ \s -> monadicIO $ do
+    let key = "some string key 1234"
+    s1 <- run $ CPP.applyXorCipher s key
+    assert $ s1 == HS.applyXorCipher s key
 
 genSafeChar :: Gen Char
 genSafeChar = elements [' ' .. '~']

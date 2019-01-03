@@ -1,10 +1,16 @@
--- | Haskell equivalent functions of the CPP functions to be need to be validated for correctness.
+-- | Haskell equivalent functions of the CPP functions to test for correctness.
 module HsLib
     ( square
     , isTriple
     , triples
+    , applyXorCipher
     )
 where
+
+import           Foreign.C.String                         ( castCharToCChar
+                                                          , castCCharToChar
+                                                          )
+import           Data.Bits                                ( xor )
 
 -- | Square a number.
 square :: Num a => a -> a
@@ -40,3 +46,11 @@ triples =
     , (39, 80, 89)
     , (65, 72, 97)
     ]
+
+applyXorCipher :: String -> String -> String
+applyXorCipher msg key = map castCCharToChar xs
+  where
+    msg' = map castCharToCChar msg
+    key' = map castCharToCChar key
+    xs   = zipWith xor msg' (concat [ key' | r <- [0 ..] ])
+

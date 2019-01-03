@@ -12,15 +12,16 @@ module InlineCPP
   )
 where
 
-import           Data.Monoid                    ( (<>) )
-import           Control.Monad
+import           Data.Monoid                              ( (<>) )
 import qualified Data.Vector.Storable          as V
 import qualified Data.Vector.Storable.Mutable  as VM
-import           Foreign.C.Types
-import           Foreign.C.String
+import           Foreign.C.Types                          ( CInt )
+import           Foreign.C.String                         ( newCString
+                                                          , peekCStringLen
+                                                          )
 import qualified Language.C.Inline.Cpp         as C
-import           Foreign.Marshal.Array
-import           Foreign.Marshal.Alloc
+import           Foreign.Marshal.Array                    ( peekArray )
+import           Foreign.Marshal.Alloc                    ( free )
 import qualified HsLib                         as HS
 
 C.context (C.cppCtx <> C.vecCtx)
@@ -29,12 +30,14 @@ C.include "<cstring>"
 C.include "../cpp/include/candidates.hpp"
 
 -- brittany-disable-next-binding
--- | Inline call to CPP function cn::square. Equivalent to HS function 'HS.square'
+-- | Inline call to CPP function cn::square.
+--  Equivalent to HS function 'HS.square'
 square :: CInt -> IO CInt
 square x = [C.exp| int { cn::square($(int x)) } |]
 
 -- brittany-disable-next-binding
--- | Inline call to CPP function cn::isTriple. Equivalent to HS function 'HS.isTriple'.
+-- | Inline call to CPP function cn::isTriple. 
+--  Equivalent to HS function 'HS.isTriple'.
 isTriple :: CInt -> CInt -> CInt -> IO CInt
 isTriple a b c =
    [C.exp| int { cn::is_pythagorean_triple($(int a), $(int b), $(int c)) } |]

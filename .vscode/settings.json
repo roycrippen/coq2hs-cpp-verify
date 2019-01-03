@@ -29,8 +29,22 @@
     "yml"
   ],
   "cSpell.words": [
+    "Alloc",
+    "GHCI",
+    "Hspec",
+    "Monoid",
+    "Vals",
+    "concat",
+    "cout",
     "cstr",
+    "cstring",
     "fobject",
-    "ints"
-  ]
+    "hspec",
+    "ints",
+    "iostream",
+    "memcpy",
+    "quickcheck",
+    "sqaure"
+  ],
+  "cSpell.language": "en"
 }
