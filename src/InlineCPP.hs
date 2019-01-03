@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
--- | Haskell wrappers for calling CPP functions directly as inline source.
+-- | Haskell wrapper functions for using CPP directly as inline source code.
 module InlineCPP
   ( square
   , isTriple

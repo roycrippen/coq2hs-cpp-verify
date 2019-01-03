@@ -13,7 +13,7 @@ square x = x * x
 -- | Test whether a, b and c form a  Pythagorean triple given that a < b < c.
 -- For example,
 --
--- >>> isTrple 7 24 25
+-- >>> isTriple 7 24 25
 -- True
 -- >>> isTriple 7 24 26
 -- False
