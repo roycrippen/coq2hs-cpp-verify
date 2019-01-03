@@ -26,7 +26,8 @@ square x = x * x
 isTriple :: Int -> Int -> Int -> Bool
 isTriple a b c = square a + square b == square c
 
--- | List of Pythagorean triples for c < 100.
+-- | List of Pythagorean triples for c < 100. Used to ensure that 20% of 
+--  the random triple values generated are valid Pythagorean triples.
 triples :: [(Int, Int, Int)]
 triples =
     [ (3 , 4 , 5)
@@ -47,6 +48,12 @@ triples =
     , (65, 72, 97)
     ]
 
+-- | Used to encode or decode a message with XOR and key. For example,
+--
+-- >>> applyXorCipher "message" "my key"
+-- "\NUL\FSS\CAN\EOT\RS\b"
+-- >>>  applyXorCipher "\NUL\FSS\CAN\EOT\RS\b" "my key"
+-- "message"
 applyXorCipher :: String -> String -> String
 applyXorCipher msg key = map castCCharToChar xs
   where

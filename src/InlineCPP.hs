@@ -111,7 +111,7 @@ testApplyXorCipher = [C.exp| void {
 -- encode string to a list of ints by calling cn::encode(...) cpp function
 -- brittany-disable-next-binding
 -- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS function 'HS.applyXorCipher'.
--- Used to encode or decode msg with XOR and key. For example,
+-- Used to encode or decode a message with XOR and key. For example,
 --
 -- >>> applyXorCipher "message" "my key"
 -- "\NUL\FSS\CAN\EOT\RS\b"

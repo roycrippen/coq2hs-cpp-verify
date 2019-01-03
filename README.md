@@ -1,6 +1,8 @@
 # coq2hs-cpp-verify
 Proof of concept test bench to code compare functions implemented in Haskell and C++.
 
+Please vist the technical [documentation].(https://roycrippen.github.io/coq2hs-cpp-verify/)
+
 requires haskell [stack](https://docs.haskellstack.org/en/stable/README/) >= 1.9.8 and (gcc >= 5.0 or clang >= 3.8)  
 
 ## Quick Start
@@ -18,6 +20,11 @@ stack run
 run property based tests and unit tests comparing results from Haskell and C++ functions
 ```bash
 stack test
+```
+
+re-build documentation (stored in ./docs)
+```bash
+stack haddock
 ```
 
 load application in GHCI and run functions interactively

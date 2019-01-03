@@ -3,3 +3,7 @@ extra-deps:
 - inline-c-cpp-0.3.0.1@sha256:916ffd22c097f399a47f6ddb9313e2ce36d8051755dd702c23f8d20a370fee09
 packages:
 - .
+build:
+  haddock-arguments:
+    haddock-args:
+    - "--odir=./docs"

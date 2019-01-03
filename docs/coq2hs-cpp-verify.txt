@@ -29,8 +29,19 @@ square :: Num a => a -> a
 --   </pre>
 isTriple :: Int -> Int -> Int -> Bool
 
--- | List of Pythagorean triples for c &lt; 100.
+-- | List of Pythagorean triples for c &lt; 100. Used to ensure that 20% of
+--   the random triple values generated are valid Pythagorean triples.
 triples :: [(Int, Int, Int)]
+
+-- | Used to encode or decode a message with XOR and key. For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; applyXorCipher "message" "my key"
+--   "\NUL\FSS\CAN\EOT\RS\b"
+--   
+--   &gt;&gt;&gt; applyXorCipher "\NUL\FSS\CAN\EOT\RS\b" "my key"
+--   "message"
+--   </pre>
 applyXorCipher :: String -> String -> String
 
 
@@ -69,8 +80,8 @@ rangeList :: Int -> IO [Int]
 testApplyXorCipher :: IO ()
 
 -- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS
---   function <a>applyXorCipher</a>. Used to encode or decode msg with XOR
---   and key. For example,
+--   function <a>applyXorCipher</a>. Used to encode or decode a message
+--   with XOR and key. For example,
 --   
 --   <pre>
 --   &gt;&gt;&gt; applyXorCipher "message" "my key"
