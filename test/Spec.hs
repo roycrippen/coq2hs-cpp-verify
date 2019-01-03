@@ -59,6 +59,7 @@ main = hspec $ do
         it "quickcheck: CPP.applyXorCipher (CPP.applyXorCipher s k) k == s"
             $ quickCheck (withMaxSuccess 10000 prop_cppApplyXorCipher)
     describe "Haskell checking CPP, HS.f args == CPP.f args" $ do
+        it "quickcheck: HS.square a == CPP.square a" $ quickCheck prop_square
         it "quickcheck: HS.isTriple a b c == CPP.isTriple a b c"
             $ quickCheck prop_pTriples
         it "quickcheck: HS.applyXorCipher s k == CPP.applyXorCipher s k"
@@ -116,3 +117,8 @@ genSafeChar = elements [' ' .. '~']
 
 genSafeString :: Gen String
 genSafeString = listOf genSafeChar
+
+prop_square :: Property
+prop_square = forAll arbitrary $ \n -> monadicIO $ do
+    nn <- run $ CPP.square (n :: CInt)
+    assert $ nn == HS.square n
