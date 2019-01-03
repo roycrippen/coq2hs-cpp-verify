@@ -39,7 +39,7 @@ stack ghci src/InlineCPP.hs --ghci-options='-fobject-code -O0'
 ## Concept 
 Extract a Haskell function (hsFunction) from a formal [Coq](https://coq.inria.fr/) proof that represents the specification of an existing C++ function (cppFunction).  The extracted Haskell function by definition will be verified as correct. This test bench represents an example of how to use [Haskell](https://www.haskell.org/), [inline-c-cpp](http://hackage.haskell.org/package/inline-c-cpp) and the property based testing tool [QuickCheck](http://hackage.haskell.org/package/QuickCheck) to verify that hsFunction and cppFunction produce identical results for the same inputs. 
 
-## Example
+## Simple Example
 ### Haskell function
 ```Haskell
 module HsLib ( square )
@@ -77,7 +77,7 @@ import           Test.QuickCheck.Monadic
 import qualified HsLib                         as HS
 import qualified InlineCPP                     as CPP
 
--- quickCheck property calling the c++ and Haskell version
+-- quickCheck property comparing the c++ and Haskell results
 prop_square :: Property
 prop_square = forAll arbitrary $ \n -> monadicIO $ do
     nn <- run $ CPP.square (n :: CInt)
