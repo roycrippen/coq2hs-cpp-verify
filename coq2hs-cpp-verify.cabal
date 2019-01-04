@@ -1,81 +1,75 @@
 cabal-version: 1.12
-
--- This file has been generated from package.yaml by hpack version 0.31.1.
---
--- see: https://github.com/sol/hpack
---
--- hash: 448d317adc8bba67447c03d02abdc858b9716408abf0327e1ff21a94ac3a9cd3
-
-name:           coq2hs-cpp-verify
-version:        0.1.0.0
-synopsis:       Verify equivalence betweeen hs functions and cpp functions
-description:    Please see the README on GitHub at <https://github.com/roycrippen/coq2hs-cpp-verify#readme>
-category:       Coq Haskell C Specification
-homepage:       https://github.com/roycrippen/coq2hs-cpp-verify#readme
-bug-reports:    https://github.com/roycrippen/coq2hs-cpp-verify/issues
-author:         Roy Crippen
-maintainer:     roycrippen@gmail.com
-copyright:      Copyright (c) 2019 Roy Crippen
-license:        BSD3
-license-file:   LICENSE
-build-type:     Simple
+name: coq2hs-cpp-verify
+version: 0.1.0.0
+license: BSD3
+license-file: LICENSE
+copyright: Copyright (c) 2019 Roy Crippen
+maintainer: roycrippen@gmail.com
+author: Roy Crippen
+homepage: https://github.com/roycrippen/coq2hs-cpp-verify#readme
+bug-reports: https://github.com/roycrippen/coq2hs-cpp-verify/issues
+synopsis: Verify equivalence betweeen hs functions and cpp functions
+description:
+    Please see the README on GitHub at <https://github.com/roycrippen/coq2hs-cpp-verify#readme>
+category: Coq Haskell C Specification
+build-type: Simple
 extra-source-files:
     README.md
 
 source-repository head
-  type: git
-  location: https://github.com/roycrippen/coq2hs-cpp-verify
+    type: git
+    location: https://github.com/roycrippen/coq2hs-cpp-verify
 
 library
-  exposed-modules:
-      InlineCPP
-    , HsLib
-  other-modules:
-      Paths_coq2hs_cpp_verify
-  hs-source-dirs:
-      src
-  ghc-options: -optc-std=c++11
-  build-depends:
-      base >=4.7 && <5
-    , inline-c-cpp >= 0.3.0.1
-    , safe-exceptions
-    , bytestring
-    , vector
-  default-language: Haskell2010
-  extra-libraries:     stdc++
-  cc-options:          -Wall -Werror
+    exposed-modules:
+        InlineCPP
+        HsLib
+    cc-options: -Wall -Werror
+    hs-source-dirs: src
+    other-modules:
+        Paths_coq2hs_cpp_verify
+    default-language: Haskell2010
+    extra-libraries:
+        stdc++
+    ghc-options: -optc-std=c++11
+    build-depends:
+        base >=4.7 && <5,
+        inline-c-cpp >=0.3.0.1,
+        safe-exceptions -any,
+        bytestring -any,
+        vector -any
 
 executable coq2hs-cpp-verify
-  main-is: Main.hs
-  other-modules:
-      Paths_coq2hs_cpp_verify
-  hs-source-dirs:
-      app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -optc-std=c++11
-  build-depends:
-      base >=4.7 && <5
-    , coq2hs-cpp-verify
-    , inline-c-cpp
-    , safe-exceptions
-    , bytestring
-    , vector
-  default-language: Haskell2010
-  extra-libraries:     stdc++
-  cc-options:          -Wall -Werror
+    main-is: Main.hs
+    cc-options: -Wall -Werror
+    hs-source-dirs: app
+    other-modules:
+        Paths_coq2hs_cpp_verify
+    default-language: Haskell2010
+    extra-libraries:
+        stdc++
+    ghc-options: -threaded -rtsopts -with-rtsopts=-N -optc-std=c++11
+    build-depends:
+        base >=4.7 && <5,
+        coq2hs-cpp-verify -any,
+        inline-c-cpp -any,
+        safe-exceptions -any,
+        bytestring -any,
+        vector -any
 
 test-suite coq2hs-cpp-verify-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_coq2hs_cpp_verify
-  hs-source-dirs:
-      test
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N -optc-std=c++11
-  build-depends:
-      base >=4.7 && <5
-    , coq2hs-cpp-verify
-    , hspec
-    , QuickCheck
-  default-language: Haskell2010
-  extra-libraries:     stdc++
-  cc-options:          -Wall -Werror
+    type: exitcode-stdio-1.0
+    main-is: Spec.hs
+    cc-options: -Wall -Werror
+    hs-source-dirs: test
+    other-modules:
+        Paths_coq2hs_cpp_verify
+    default-language: Haskell2010
+    extra-libraries:
+        stdc++
+    ghc-options: -threaded -rtsopts -with-rtsopts=-N -optc-std=c++11
+    build-depends:
+        base >=4.7 && <5,
+        coq2hs-cpp-verify -any,
+        hspec -any,
+        QuickCheck -any

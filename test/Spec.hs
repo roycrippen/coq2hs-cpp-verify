@@ -1,7 +1,5 @@
 module Main where
 
-import qualified InlineCPP                     as CPP
-import qualified HsLib                         as HS
 import           Test.Hspec                               ( shouldBe
                                                           , describe
                                                           , hspec
@@ -27,6 +25,8 @@ import           Test.QuickCheck.Monadic                  ( monadicIO
                                                           )
 import           Foreign.C.Types
 import           Control.Monad                            ( (>=>) )
+import qualified InlineCPP                     as CPP
+import qualified HsLib                         as HS
 
 main :: IO ()
 main = hspec $ do

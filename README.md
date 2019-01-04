@@ -1,7 +1,7 @@
 # coq2hs-cpp-verify
 Proof of concept test bench to code compare functions implemented in Haskell and C++.
 
-Please vist the technical [documentation].(https://roycrippen.github.io/coq2hs-cpp-verify/)
+Please visit the technical [documentation](https://roycrippen.github.io/coq2hs-cpp-verify/).
 
 requires haskell [stack](https://docs.haskellstack.org/en/stable/README/) >= 1.9.8 and (gcc >= 5.0 or clang >= 3.8)  
 
@@ -106,3 +106,6 @@ Haskell checking CPP
 +++ OK, passed 10000 tests.
   quickcheck: HS.square a == CPP.square a
 ```
+
+### Todo
+- 
