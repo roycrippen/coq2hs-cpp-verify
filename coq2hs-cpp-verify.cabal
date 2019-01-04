@@ -71,5 +71,7 @@ test-suite coq2hs-cpp-verify-test
     build-depends:
         base >=4.7 && <5,
         coq2hs-cpp-verify -any,
+        bytestring -any,
         hspec -any,
-        QuickCheck -any
+        QuickCheck -any,
+        quickcheck-instances -any

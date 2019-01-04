@@ -12,16 +12,20 @@ module InlineCPP
   )
 where
 
-import           Data.Monoid                              ( (<>) )
+import           Data.Monoid                    ( (<>) )
+import           Foreign.C.Types                ( CInt )
+import           Foreign.C.String               ( newCString
+                                                , peekCStringLen
+                                                )
+import           Foreign.Marshal.Array          ( peekArray )
+import           Foreign.Marshal.Alloc          ( free )
+import           Data.ByteString                ( ByteString )
+import qualified Data.ByteString               as B
+import qualified Data.ByteString.Unsafe        as BU
+import qualified Data.ByteString.Char8         as C
 import qualified Data.Vector.Storable          as V
 import qualified Data.Vector.Storable.Mutable  as VM
-import           Foreign.C.Types                          ( CInt )
-import           Foreign.C.String                         ( newCString
-                                                          , peekCStringLen
-                                                          )
 import qualified Language.C.Inline.Cpp         as C
-import           Foreign.Marshal.Array                    ( peekArray )
-import           Foreign.Marshal.Alloc                    ( free )
 import qualified HsLib                         as HS
 
 C.context (C.cppCtx <> C.vecCtx)
@@ -108,49 +112,42 @@ testApplyXorCipher = [C.exp| void {
     cout << "std::cout -> applyXorCipher(applyXorCipher(cs, key), key): '" << orig_str << "'\n";
   }|]
 
--- encode string to a list of ints by calling cn::encode(...) cpp function
 -- brittany-disable-next-binding
 -- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS function 'HS.applyXorCipher'.
 -- Used to encode or decode a message with XOR and key. For example,
 --
--- >>> applyXorCipher "message" "my key"
+-- >>> import qualified Data.ByteString.Char8 as C
+-- >>> applyXorCipher (C.pack "message") (C.pack "my key")
 -- "\NUL\FSS\CAN\EOT\RS\b"
--- >>>  applyXorCipher "\NUL\FSS\CAN\EOT\RS\b" "my key"
+-- >>>  applyXorCipher (C.pack "\NUL\FSS\CAN\EOT\RS\b") (C.pack "my key")
 -- "message"
-applyXorCipher :: String -> String -> IO String
-applyXorCipher msg key = do
-  -- create c-string to pass to cpp 
-  let nCInt = fromIntegral (length msg) :: CInt
-  cStrIn <- newCString msg
-  cStrKey <- newCString key
+applyXorCipher :: ByteString -> ByteString -> IO ByteString
+applyXorCipher msg key =  do
+  (res, size) <- BU.unsafeUseAsCStringLen msg $ \(cStrIn, cStrInLength) ->
+    BU.unsafeUseAsCString key $ \cStrKey -> do
+      let nCInt = fromIntegral cStrInLength :: CInt
+      cStrOut <- [C.block| char* {
+        // rename inputs to more readable names
+        char *cStrIn = $(char *cStrIn);
+        char *key = $(char *cStrKey);
+        int n = $(int nCInt);
 
-  -- cpp code to call cn::applyXorCipher(string, key)
-  cStrOut <- [C.block| char* {
-      // rename input pointer and n to a more readable names
-      char *cStrIn = $(char *cStrIn);
-      char *key = $(char *cStrKey);
-      int n = $(int nCInt);
+        // copy *char to string (not casting)
+        // necessary because string might contain NULL
+        std::string s = "";
+        for (int i = 0; i < n; i++) {
+          s.push_back(cStrIn[i]);
+        }
 
-      // copy *char to string 
-      // necessary because string might contain NULL
-      std::string s = "";
-      for (int i = 0; i < n; i++) {
-        s.push_back(cStrIn[i]);
-      }
+        auto ds = cn::applyXorCipher(s, key);
 
-      auto ds = cn::applyXorCipher(s, key);
+        // convert decoded std::string to a char* and return it
+        char *cstr = new char[n + 1];
+        std::memcpy(cstr, ds.data(), n);
+        return cstr;
+      }|]
+      return (cStrOut, cStrInLength)
 
-      // convert decoded std::string to a char* and return it
-      char *cstr = new char[n + 1];
-      std::memcpy(cstr, ds.data(), n);
-      return cstr;
-    }|]
+  B.packCStringLen (res, size)
 
-  -- get the result string out of the pointer, cleanup memory and return
-  res <- peekCStringLen (cStrOut, length msg)
-  free cStrIn
-  free cStrOut
-  -- putStrLn $ "cs = " ++ show ( map fromEnum cs) ++
-  --          ", res = " ++ show ( map fromEnum res)
-  return res
 

@@ -36,13 +36,15 @@ triples :: [(Int, Int, Int)]
 -- | Used to encode or decode a message with XOR and key. For example,
 --   
 --   <pre>
---   &gt;&gt;&gt; applyXorCipher "message" "my key"
+--   &gt;&gt;&gt; import qualified Data.ByteString.Char8 as C
+--   
+--   &gt;&gt;&gt; applyXorCipher (C.pack "message") (C.pack "my key")
 --   "\NUL\FSS\CAN\EOT\RS\b"
 --   
---   &gt;&gt;&gt; applyXorCipher "\NUL\FSS\CAN\EOT\RS\b" "my key"
+--   &gt;&gt;&gt; applyXorCipher (C.pack "\NUL\FSS\CAN\EOT\RS\b") (C.pack "my key")
 --   "message"
 --   </pre>
-applyXorCipher :: String -> String -> String
+applyXorCipher :: ByteString -> ByteString -> ByteString
 
 
 -- | Haskell wrapper functions for using CPP directly as inline source
@@ -84,10 +86,12 @@ testApplyXorCipher :: IO ()
 --   with XOR and key. For example,
 --   
 --   <pre>
---   &gt;&gt;&gt; applyXorCipher "message" "my key"
+--   &gt;&gt;&gt; import qualified Data.ByteString.Char8 as C
+--   
+--   &gt;&gt;&gt; applyXorCipher (C.pack "message") (C.pack "my key")
 --   "\NUL\FSS\CAN\EOT\RS\b"
 --   
---   &gt;&gt;&gt; applyXorCipher "\NUL\FSS\CAN\EOT\RS\b" "my key"
+--   &gt;&gt;&gt; applyXorCipher (C.pack "\NUL\FSS\CAN\EOT\RS\b") (C.pack "my key")
 --   "message"
 --   </pre>
-applyXorCipher :: String -> String -> IO String
+applyXorCipher :: ByteString -> ByteString -> IO ByteString

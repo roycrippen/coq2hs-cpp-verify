@@ -5,6 +5,9 @@ import qualified InlineCPP                     as CPP
 import qualified HsLib                         as HS
 import           Foreign.C
 import           Control.Monad.IO.Class
+import           Data.ByteString                ( ByteString )
+import qualified Data.ByteString               as B
+import qualified Data.ByteString.Char8         as C
 
 main :: IO ()
 main = do
@@ -31,12 +34,23 @@ main = do
     -- interesting way to quickly test the cpp code
     CPP.testApplyXorCipher
 
-    -- CPP.applyXorCipher twice
+    -- call CPP.applyXorCipher twice
     putStrLn ""
-    let s1  = "String to cipher."
-    let key = "my secret key"
-    putStrLn $ "input string   = " ++ show s1
+    let s1  = C.pack "String to cipher."
+        key = C.pack "my secret key"
     s2 <- CPP.applyXorCipher s1 key
-    putStrLn $ "encoded string from cpp = " ++ show s2
     s3 <- CPP.applyXorCipher s2 key
+    putStrLn $ "input string   = " ++ show s1
+    putStrLn $ "encoded string from cpp = " ++ show s2
     putStrLn $ "decoded string from cpp = " ++ show s3
+
+    -- call HS.applyXorCipher twice
+    putStrLn ""
+    let s1  = C.pack "String to cipher."
+        key = C.pack "my secret key"
+        s2  = HS.applyXorCipher s1 key
+        s3  = HS.applyXorCipher s2 key
+    putStrLn $ "input string   = " ++ show s1
+    putStrLn $ "encoded string from hs = " ++ show s2
+    putStrLn $ "decoded string from hs = " ++ show s3
+

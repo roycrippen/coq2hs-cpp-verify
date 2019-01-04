@@ -1,30 +1,34 @@
 module Main where
 
-import           Test.Hspec                               ( shouldBe
-                                                          , describe
-                                                          , hspec
-                                                          , it
-                                                          )
-import           Test.QuickCheck                          ( Arbitrary
-                                                          , Gen
-                                                          , Property(..)
-                                                          , arbitrary
-                                                          , choose
-                                                          , elements
-                                                          , forAll
-                                                          , frequency
-                                                          , listOf
-                                                          , sized
-                                                          , suchThat
-                                                          , quickCheck
-                                                          , withMaxSuccess
-                                                          )
-import           Test.QuickCheck.Monadic                  ( monadicIO
-                                                          , run
-                                                          , assert
-                                                          )
+import           Test.Hspec                     ( shouldBe
+                                                , describe
+                                                , hspec
+                                                , it
+                                                )
+import           Test.QuickCheck                ( Arbitrary
+                                                , Gen
+                                                , Property(..)
+                                                , arbitrary
+                                                , choose
+                                                , elements
+                                                , forAll
+                                                , frequency
+                                                , listOf
+                                                , sized
+                                                , suchThat
+                                                , quickCheck
+                                                , withMaxSuccess
+                                                )
+import           Test.QuickCheck.Monadic        ( monadicIO
+                                                , run
+                                                , assert
+                                                )
+import           Test.QuickCheck.Instances
 import           Foreign.C.Types
-import           Control.Monad                            ( (>=>) )
+import           Control.Monad                  ( (>=>) )
+import           Data.ByteString                ( ByteString )
+import qualified Data.ByteString               as B
+import qualified Data.ByteString.Char8         as C
 import qualified InlineCPP                     as CPP
 import qualified HsLib                         as HS
 
@@ -95,28 +99,22 @@ prop_pTriples = forAll pTripleVals $ \(a, b, c) -> monadicIO $ do
     assert (HS.isTriple a b c == (i == 1))
 
 prop_cppApplyXorCipher :: Property
-prop_cppApplyXorCipher = forAll genSafeString $ \s0 -> monadicIO $ do
-    let key = "some string key 1234"
+prop_cppApplyXorCipher = forAll arbitrary $ \s0 -> monadicIO $ do
+    let key = C.pack "some string key 1234"
     s1 <- run $ CPP.applyXorCipher s0 key
     s2 <- run $ CPP.applyXorCipher s1 key
     assert $ s2 == s0
 
 prop_hsApplyXorCipher :: Property
-prop_hsApplyXorCipher = forAll genSafeString $ \s -> monadicIO $ do
-    let key = "some string key 1234"
+prop_hsApplyXorCipher = forAll arbitrary $ \s -> monadicIO $ do
+    let key = C.pack "some string key 1234"
     assert $ HS.applyXorCipher (HS.applyXorCipher s key) key == s
 
 prop_applyXorCipher :: Property
-prop_applyXorCipher = forAll genSafeString $ \s -> monadicIO $ do
-    let key = "some string key 1234"
+prop_applyXorCipher = forAll arbitrary $ \s -> monadicIO $ do
+    let key = C.pack "some string key 1234"
     s1 <- run $ CPP.applyXorCipher s key
     assert $ s1 == HS.applyXorCipher s key
-
-genSafeChar :: Gen Char
-genSafeChar = elements [' ' .. '~']
-
-genSafeString :: Gen String
-genSafeString = listOf genSafeChar
 
 prop_square :: Property
 prop_square = forAll arbitrary $ \n -> monadicIO $ do

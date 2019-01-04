@@ -7,10 +7,13 @@ module HsLib
     )
 where
 
-import           Foreign.C.String                         ( castCharToCChar
-                                                          , castCCharToChar
-                                                          )
-import           Data.Bits                                ( xor )
+import           Foreign.C.String               ( castCharToCChar
+                                                , castCCharToChar
+                                                )
+import           Data.Bits                      ( xor )
+import           Data.ByteString                ( ByteString )
+import qualified Data.ByteString               as B
+import qualified Data.ByteString.Char8         as C
 
 -- | Square a number.
 square :: Num a => a -> a
@@ -50,14 +53,15 @@ triples =
 
 -- | Used to encode or decode a message with XOR and key. For example,
 --
--- >>> applyXorCipher "message" "my key"
+-- >>> import qualified Data.ByteString.Char8 as C
+-- >>> applyXorCipher (C.pack "message") (C.pack "my key")
 -- "\NUL\FSS\CAN\EOT\RS\b"
--- >>>  applyXorCipher "\NUL\FSS\CAN\EOT\RS\b" "my key"
+-- >>>  applyXorCipher (C.pack "\NUL\FSS\CAN\EOT\RS\b") (C.pack "my key")
 -- "message"
-applyXorCipher :: String -> String -> String
-applyXorCipher msg key = map castCCharToChar xs
+applyXorCipher :: ByteString -> ByteString -> ByteString
+applyXorCipher msg key = B.pack (B.zipWith xor msg keys)
   where
-    msg' = map castCharToCChar msg
-    key' = map castCharToCChar key
-    xs   = zipWith xor msg' (concat [ key' | r <- [0 ..] ])
+    l    = C.length msg `div` C.length key
+    keys = C.concat $ replicate (l + 1) key
+
 
