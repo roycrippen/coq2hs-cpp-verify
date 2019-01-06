@@ -37,6 +37,7 @@ library
         inline-c-cpp >=0.3.0.1,
         safe-exceptions -any,
         bytestring -any,
+        text -any,
         vector -any
 
 executable coq2hs-cpp-verify
@@ -55,6 +56,7 @@ executable coq2hs-cpp-verify
         inline-c-cpp -any,
         safe-exceptions -any,
         bytestring -any,
+        text -any,
         vector -any
 
 test-suite coq2hs-cpp-verify-test
@@ -72,6 +74,8 @@ test-suite coq2hs-cpp-verify-test
         base >=4.7 && <5,
         coq2hs-cpp-verify -any,
         bytestring -any,
+        text -any,
         hspec -any,
         QuickCheck -any,
-        quickcheck-instances -any
+        quickcheck-instances -any,
+        quickcheck-unicode -any

@@ -4,16 +4,19 @@ module HsLib
     , isTriple
     , triples
     , applyXorCipher
+    , encodeCodepoint
+    , decodeToCodepoint
     )
 where
 
-import           Foreign.C.String               ( castCharToCChar
-                                                , castCCharToChar
-                                                )
-import           Data.Bits                      ( xor )
-import           Data.ByteString                ( ByteString )
-import qualified Data.ByteString               as B
-import qualified Data.ByteString.Char8         as C
+import Data.Bits (xor)
+import Data.ByteString (ByteString)
+import Data.Char (chr, ord)
+import Foreign.C.String (castCharToCChar, castCCharToChar)
+import qualified Data.ByteString as B (pack, unpack, zipWith)
+import qualified Data.ByteString.Char8 as C (concat, length)
+import qualified Data.Text as Text (head, singleton)
+import qualified Data.Text.Encoding as Text (decodeUtf8, encodeUtf8)
 
 -- | Square a number.
 square :: Num a => a -> a
@@ -51,7 +54,7 @@ triples =
     , (65, 72, 97)
     ]
 
--- | Used to encode or decode a message with XOR and key. For example,
+-- | Encode or decode a message with XOR and key. For example,
 --
 -- >>> import qualified Data.ByteString.Char8 as C
 -- >>> applyXorCipher (C.pack "message") (C.pack "my key")
@@ -64,4 +67,14 @@ applyXorCipher msg key = B.pack (B.zipWith xor msg keys)
     l    = C.length msg `div` C.length key
     keys = C.concat $ replicate (l + 1) key
 
+-- | Encode Unicode code-points to UTF-8
+-- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell
+encodeCodepoint :: Int -> [Int]
+encodeCodepoint =
+    map fromIntegral . B.unpack . Text.encodeUtf8 . Text.singleton . chr
 
+-- | Decode UTF-8 to Unicode code-points
+-- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell
+decodeToCodepoint :: [Int] -> Int
+decodeToCodepoint =
+    ord . Text.head . Text.decodeUtf8 . B.pack . map fromIntegral

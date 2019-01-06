@@ -1,36 +1,36 @@
 module Main where
 
-import           Test.Hspec                     ( shouldBe
-                                                , describe
-                                                , hspec
-                                                , it
-                                                )
-import           Test.QuickCheck                ( Arbitrary
-                                                , Gen
-                                                , Property(..)
-                                                , arbitrary
-                                                , choose
-                                                , elements
-                                                , forAll
-                                                , frequency
-                                                , listOf
-                                                , sized
-                                                , suchThat
-                                                , quickCheck
-                                                , withMaxSuccess
-                                                )
-import           Test.QuickCheck.Monadic        ( monadicIO
-                                                , run
-                                                , assert
-                                                )
-import           Test.QuickCheck.Instances
-import           Foreign.C.Types
-import           Control.Monad                  ( (>=>) )
-import           Data.ByteString                ( ByteString )
-import qualified Data.ByteString               as B
-import qualified Data.ByteString.Char8         as C
-import qualified InlineCPP                     as CPP
-import qualified HsLib                         as HS
+import qualified HsLib as HS
+    ( square
+    , isTriple
+    , triples
+    , applyXorCipher
+    , decodeToCodepoint
+    , encodeCodepoint
+    )
+import qualified InlineCPP as CPP (square, isTriple, applyXorCipher)
+import Control.Monad ((>=>))
+import Foreign.C.Types (CInt)
+import qualified Data.ByteString.Char8 as C (pack)
+import qualified Test.QuickCheck.Unicode as QCU (reserved, planes)
+import Test.Hspec (shouldBe, describe, hspec, it)
+import Test.QuickCheck.Instances
+import Test.QuickCheck.Monadic (monadicIO, run, assert)
+import Test.QuickCheck
+    ( Arbitrary
+    , Gen
+    , Property(..)
+    , arbitrary
+    , choose
+    , elements
+    , forAll
+    , frequency
+    , listOf
+    , sized
+    , suchThat
+    , quickCheck
+    , withMaxSuccess
+    )
 
 main :: IO ()
 main = hspec $ do
@@ -46,6 +46,8 @@ main = hspec $ do
         it "(3,4,6) is NOT a triplet" $ HS.isTriple 3 4 6 `shouldBe` False
         it "quickcheck: HS.applyXorCipher (HS.applyXorCipher s k) k == s"
             $ quickCheck (withMaxSuccess 10000 prop_hsApplyXorCipher)
+        it "quickcheck: HS.decodeToCodepoint (HS.encodeCodepoint cp) == cp"
+            $ quickCheck (withMaxSuccess 10000 prop_hsEncodeDecodeCodepoint)
     describe "CPP Functions" $ do
         it "sqaure a negative integer" $ do
             CPP.square (-3) >>= \v -> v `shouldBe` 9
@@ -68,6 +70,16 @@ main = hspec $ do
             $ quickCheck prop_pTriples
         it "quickcheck: HS.applyXorCipher s k == CPP.applyXorCipher s k"
             $ quickCheck (withMaxSuccess 10000 prop_applyXorCipher)
+
+unicodeVal :: Gen Int
+unicodeVal = excluding QCU.reserved (frequency QCU.planes)
+
+excluding :: (a -> Bool) -> Gen a -> Gen a
+excluding bad gen = loop
+  where
+    loop = do
+        x <- gen
+        if bad x then loop else return x
 
 flexList :: Arbitrary a => Gen [a]
 flexList = sized
@@ -120,3 +132,7 @@ prop_square :: Property
 prop_square = forAll arbitrary $ \n -> monadicIO $ do
     nn <- run $ CPP.square (n :: CInt)
     assert $ nn == HS.square n
+
+prop_hsEncodeDecodeCodepoint :: Property
+prop_hsEncodeDecodeCodepoint = forAll unicodeVal $ \cp ->
+    monadicIO $ assert $ HS.decodeToCodepoint (HS.encodeCodepoint cp) == cp

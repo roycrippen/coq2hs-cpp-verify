@@ -1,13 +1,13 @@
 module Main where
 
-import qualified Data.Vector.Storable          as V
-import qualified InlineCPP                     as CPP
-import qualified HsLib                         as HS
-import           Foreign.C
-import           Control.Monad.IO.Class
-import           Data.ByteString                ( ByteString )
-import qualified Data.ByteString               as B
-import qualified Data.ByteString.Char8         as C
+import qualified InlineCPP as CPP
+    (square, isTriple, sumVec, rangeList, testApplyXorCipher, applyXorCipher)
+import qualified HsLib as HS
+    (square, isTriple, applyXorCipher, encodeCodepoint, decodeToCodepoint)
+import Data.ByteString (ByteString)
+import qualified Data.ByteString.Char8 as C (pack)
+import Text.Printf (printf)
+import Data.Foldable (for_)
 
 main :: IO ()
 main = do
@@ -54,3 +54,15 @@ main = do
     putStrLn $ "encoded string from hs = " ++ show s2
     putStrLn $ "decoded string from hs = " ++ show s3
 
+    putStrLn ""
+    putStrLn "Character  Unicode  UTF-8 encoding (hex)  Decoded"
+    putStrLn "-------------------------------------------------"
+    for_ [0x0041, 0x00F6, 0x0416, 0x20AC, 0x1D11E] $ \codepoint -> do
+        let values     = HS.encodeCodepoint codepoint
+            codepoint' = HS.decodeToCodepoint values
+        putStrLn $ printf
+            "%c          %-7s  %-20s  %c"
+            codepoint
+            (printf "U+%04X" codepoint :: String)
+            (unwords (map (printf "%02X") values))
+            codepoint'

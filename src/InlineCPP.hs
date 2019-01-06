@@ -12,21 +12,17 @@ module InlineCPP
   )
 where
 
-import           Data.Monoid                    ( (<>) )
-import           Foreign.C.Types                ( CInt )
-import           Foreign.C.String               ( newCString
-                                                , peekCStringLen
-                                                )
-import           Foreign.Marshal.Array          ( peekArray )
-import           Foreign.Marshal.Alloc          ( free )
-import           Data.ByteString                ( ByteString )
-import qualified Data.ByteString               as B
-import qualified Data.ByteString.Unsafe        as BU
-import qualified Data.ByteString.Char8         as C
-import qualified Data.Vector.Storable          as V
-import qualified Data.Vector.Storable.Mutable  as VM
-import qualified Language.C.Inline.Cpp         as C
-import qualified HsLib                         as HS
+import Data.ByteString (ByteString)
+import Data.Monoid ((<>))
+import Foreign.C.String (newCString, peekCStringLen)
+import Foreign.C.Types (CInt)
+import Foreign.Marshal.Alloc (free)
+import Foreign.Marshal.Array (peekArray)
+import qualified Data.ByteString as B (packCStringLen)
+import qualified Data.ByteString.Unsafe as BU
+  (unsafeUseAsCStringLen, unsafeUseAsCString)
+import qualified Data.Vector.Storable as V (freeze, fromList, thaw)
+import qualified Language.C.Inline.Cpp as C
 
 C.context (C.cppCtx <> C.vecCtx)
 C.include "<iostream>"

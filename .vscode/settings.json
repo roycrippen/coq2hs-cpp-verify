@@ -30,6 +30,7 @@
   ],
   "cSpell.words": [
     "Alloc",
+    "Codepoint",
     "GHCI",
     "Hspec",
     "Monoid",
@@ -44,6 +45,7 @@
     "ints",
     "iostream",
     "memcpy",
+    "printf",
     "quickcheck",
     "sqaure"
   ],
