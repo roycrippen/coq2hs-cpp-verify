@@ -43,14 +43,6 @@ namespace cn {
         return show(vs_);
     }
 
-    wstring show(const uint32_t val) {
-        wstringstream ws;
-        ws << val;
-        wstring str;
-        ws >> str;
-        return str;
-    }
-
     string show_utf8_hex(vector<uint8_t> xs) {
         stringstream ss;
         for (auto i = 0; i < xs.size() - 1; ++i) {
@@ -63,7 +55,7 @@ namespace cn {
         return s;
     }
 
-    // Unicode encoding and decoding
+    // Unicode codepoint encoding and decoding
     // port from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go
     // first byte of a 2-byte encoding starts 110 and carries 5 bits of data
     const uint8_t b2Lead = 0xC0;  // 1100 0000
@@ -82,7 +74,7 @@ namespace cn {
     const uint8_t mbMask = 0x3F;  // 0011 1111
 
 
-    vector<uint8_t> encodeUTF8(const uint32_t i) {
+    vector<uint8_t> encodeCodepoint(const uint32_t i) {
         vector<uint8_t> res = {};
 
         if (i <= (1 << 7) - 1) { // max code point that encodes into a single byte
@@ -103,8 +95,8 @@ namespace cn {
         return res;
     }
 
-    uint32_t decodeUTF8(const vector<uint8_t> &bs) {
-        if (bs.size() < 1 || bs.size() > 4)
+    uint32_t encodeCodepoint(const vector<uint8_t> &bs) {
+        if (bs.empty() || bs.size() > 4)
             return 0;
 
         auto bs0 = bs[0];
