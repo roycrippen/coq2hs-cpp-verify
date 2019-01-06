@@ -9,14 +9,15 @@ module HsLib
     )
 where
 
-import Data.Bits (xor)
-import Data.ByteString (ByteString)
-import Data.Char (chr, ord)
-import Foreign.C.String (castCharToCChar, castCCharToChar)
-import qualified Data.ByteString as B (pack, unpack, zipWith)
-import qualified Data.ByteString.Char8 as C (concat, length)
-import qualified Data.Text as Text (head, singleton)
-import qualified Data.Text.Encoding as Text (decodeUtf8, encodeUtf8)
+import           Data.Bits                      ( xor )
+import           Data.ByteString                ( ByteString )
+import           Data.Char                      ( chr
+                                                , ord
+                                                )
+import qualified Data.ByteString               as B
+import qualified Data.ByteString.Char8         as C
+import qualified Data.Text                     as Text
+import qualified Data.Text.Encoding            as Text
 
 -- | Square a number.
 square :: Num a => a -> a

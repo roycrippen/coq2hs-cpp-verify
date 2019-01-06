@@ -1,36 +1,15 @@
 module Main where
 
-import qualified HsLib as HS
-    ( square
-    , isTriple
-    , triples
-    , applyXorCipher
-    , decodeToCodepoint
-    , encodeCodepoint
-    )
-import qualified InlineCPP as CPP (square, isTriple, applyXorCipher)
-import Control.Monad ((>=>))
-import Foreign.C.Types (CInt)
-import qualified Data.ByteString.Char8 as C (pack)
-import qualified Test.QuickCheck.Unicode as QCU (reserved, planes)
-import Test.Hspec (shouldBe, describe, hspec, it)
-import Test.QuickCheck.Instances
-import Test.QuickCheck.Monadic (monadicIO, run, assert)
-import Test.QuickCheck
-    ( Arbitrary
-    , Gen
-    , Property(..)
-    , arbitrary
-    , choose
-    , elements
-    , forAll
-    , frequency
-    , listOf
-    , sized
-    , suchThat
-    , quickCheck
-    , withMaxSuccess
-    )
+import qualified HsLib                         as HS
+import qualified InlineCPP                     as CPP
+import           Control.Monad                  ( (>=>) )
+import           Foreign.C.Types                ( CInt )
+import qualified Data.ByteString.Char8         as C
+import qualified Test.QuickCheck.Unicode       as QCU
+import           Test.Hspec
+import           Test.QuickCheck
+import           Test.QuickCheck.Instances
+import qualified Test.QuickCheck.Monadic       as QCM
 
 main :: IO ()
 main = hspec $ do
@@ -103,36 +82,39 @@ pTripleVals = do
 prop_pTriples :: Property
 -- prop_pTriples = forAll pTripleVals $ \(a, b, c) ->
 --     collect (a, b, c) $ monadicIO $ do
-prop_pTriples = forAll pTripleVals $ \(a, b, c) -> monadicIO $ do
+prop_pTriples = forAll pTripleVals $ \(a, b, c) -> QCM.monadicIO $ do
     let a' = fromIntegral a
         b' = fromIntegral b
         c' = fromIntegral c
-    i <- run (CPP.isTriple a' b' c')
-    assert (HS.isTriple a b c == (i == 1))
+    i <- QCM.run (CPP.isTriple a' b' c')
+    QCM.assert (HS.isTriple a b c == (i == 1))
 
 prop_cppApplyXorCipher :: Property
-prop_cppApplyXorCipher = forAll arbitrary $ \s0 -> monadicIO $ do
+prop_cppApplyXorCipher = forAll arbitrary $ \s0 -> QCM.monadicIO $ do
     let key = C.pack "some string key 1234"
-    s1 <- run $ CPP.applyXorCipher s0 key
-    s2 <- run $ CPP.applyXorCipher s1 key
-    assert $ s2 == s0
+    s1 <- QCM.run $ CPP.applyXorCipher s0 key
+    s2 <- QCM.run $ CPP.applyXorCipher s1 key
+    QCM.assert $ s2 == s0
 
 prop_hsApplyXorCipher :: Property
-prop_hsApplyXorCipher = forAll arbitrary $ \s -> monadicIO $ do
+prop_hsApplyXorCipher = forAll arbitrary $ \s -> QCM.monadicIO $ do
     let key = C.pack "some string key 1234"
-    assert $ HS.applyXorCipher (HS.applyXorCipher s key) key == s
+    QCM.assert $ HS.applyXorCipher (HS.applyXorCipher s key) key == s
 
 prop_applyXorCipher :: Property
-prop_applyXorCipher = forAll arbitrary $ \s -> monadicIO $ do
+prop_applyXorCipher = forAll arbitrary $ \s -> QCM.monadicIO $ do
     let key = C.pack "some string key 1234"
-    s1 <- run $ CPP.applyXorCipher s key
-    assert $ s1 == HS.applyXorCipher s key
+    s1 <- QCM.run $ CPP.applyXorCipher s key
+    QCM.assert $ s1 == HS.applyXorCipher s key
 
 prop_square :: Property
-prop_square = forAll arbitrary $ \n -> monadicIO $ do
-    nn <- run $ CPP.square (n :: CInt)
-    assert $ nn == HS.square n
+prop_square = forAll arbitrary $ \n -> QCM.monadicIO $ do
+    nn <- QCM.run $ CPP.square (n :: CInt)
+    QCM.assert $ nn == HS.square n
 
 prop_hsEncodeDecodeCodepoint :: Property
 prop_hsEncodeDecodeCodepoint = forAll unicodeVal $ \cp ->
-    monadicIO $ assert $ HS.decodeToCodepoint (HS.encodeCodepoint cp) == cp
+    QCM.monadicIO
+        $  QCM.assert
+        $  HS.decodeToCodepoint (HS.encodeCodepoint cp)
+        == cp
