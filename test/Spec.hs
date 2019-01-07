@@ -50,6 +50,8 @@ main = hspec $ do
         it "quickcheck: HS.applyXorCipher s k == CPP.applyXorCipher s k"
             $ quickCheck (withMaxSuccess 10000 prop_applyXorCipher)
 
+
+
 unicodeVal :: Gen Int
 unicodeVal = excluding QCU.reserved (frequency QCU.planes)
 
@@ -79,6 +81,11 @@ pTripleVals = do
     (v1, v2, v3) <- rangeVals `suchThat` (\(v1, v2, v3) -> v1 < v2 && v2 < v3)
     return (v1, v2, v3)
 
+prop_square :: Property
+prop_square = forAll arbitrary $ \n -> QCM.monadicIO $ do
+    nn <- QCM.run $ CPP.square (n :: CInt)
+    QCM.assert $ nn == HS.square n
+
 prop_pTriples :: Property
 -- prop_pTriples = forAll pTripleVals $ \(a, b, c) ->
 --     collect (a, b, c) $ monadicIO $ do
@@ -106,11 +113,6 @@ prop_applyXorCipher = forAll arbitrary $ \s -> QCM.monadicIO $ do
     let key = C.pack "some string key 1234"
     s1 <- QCM.run $ CPP.applyXorCipher s key
     QCM.assert $ s1 == HS.applyXorCipher s key
-
-prop_square :: Property
-prop_square = forAll arbitrary $ \n -> QCM.monadicIO $ do
-    nn <- QCM.run $ CPP.square (n :: CInt)
-    QCM.assert $ nn == HS.square n
 
 prop_hsEncodeDecodeCodepoint :: Property
 prop_hsEncodeDecodeCodepoint = forAll unicodeVal $ \cp ->

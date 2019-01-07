@@ -1,6 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE QuasiQuotes #-}
 {-# LANGUAGE ScopedTypeVariables #-}
+
 -- | Haskell wrapper functions for using CPP directly as inline source code.
 module InlineCPP
   ( square
@@ -9,18 +10,24 @@ module InlineCPP
   , rangeList
   , testApplyXorCipher
   , applyXorCipher
+  , encodeCodepoint
+  , decodeToCodepoint
   )
 where
 
 import           Data.ByteString                ( ByteString )
 import           Data.Monoid                    ( (<>) )
-import           Foreign.C.Types                ( CInt )
+import           Foreign.C.Types                ( CInt
+                                                , CUChar
+                                                )
 import           Foreign.Marshal.Alloc          ( free )
 import           Foreign.Marshal.Array          ( peekArray )
 import qualified Data.ByteString               as B
 import qualified Data.ByteString.Unsafe        as BU
 import qualified Data.Vector.Storable          as V
+import qualified Data.Vector.Storable.Mutable  as VM
 import qualified Language.C.Inline.Cpp         as C
+import qualified HsLib                         as HS
 
 C.context (C.cppCtx <> C.vecCtx)
 C.include "<iostream>"
@@ -29,13 +36,21 @@ C.include "../cpp/include/candidates.hpp"
 
 -- brittany-disable-next-binding
 -- | Inline call to CPP function cn::square.
---  Equivalent to HS function 'HS.square'
+--  Equivalent to HS function 'HS.square'. For example,
+--
+-- >>> square 9
+-- 81
 square :: CInt -> IO CInt
 square x = [C.exp| int { cn::square($(int x)) } |]
 
 -- brittany-disable-next-binding
 -- | Inline call to CPP function cn::isTriple. 
---  Equivalent to HS function 'HS.isTriple'.
+--  Equivalent to HS function 'HS.isTriple'. For example,
+--
+-- >>> isTriple 7 24 25
+-- True
+-- >>> isTriple 7 24 26
+-- False
 isTriple :: CInt -> CInt -> CInt -> IO CInt
 isTriple a b c =
    [C.exp| int { cn::is_pythagorean_triple($(int a), $(int b), $(int c)) } |]
@@ -96,6 +111,12 @@ rangeList _n = do
 -- brittany-disable-next-binding
 -- | Inline CPP calls cn::applyXorCipher twice to encoded then decode a message.
 -- Demonstrates use of cout and successful round trip use of the XOR cipher.
+-- For example,
+-- 
+-- >>> testApplyXorCipher
+-- This is message from cpp std::cout.
+-- std::cout -> (cs, key): ('This is the test string...', 'cipher key 123')'
+-- std::cout -> applyXorCipher(applyXorCipher(cs, key), key): 'This is the test string...'
 testApplyXorCipher :: IO ()
 testApplyXorCipher = [C.exp| void {
     cout << "This is message from cpp std::cout.\n" ;
@@ -145,3 +166,44 @@ applyXorCipher msg key =  do
   B.packCStringLen (res, size)
 
 
+-- brittany-disable-next-binding
+encodeCodepoint :: Int -> IO [Int]
+encodeCodepoint _n = do
+  inVec <- V.thaw (V.fromList ([-1,-1,-1,-1]::[CInt]))
+  let n = fromIntegral _n :: CInt
+
+  [C.block| void {
+    int* res = $vec-ptr:(int *inVec);
+    auto i = static_cast<uint32_t>($(int n));
+
+    vector<uint8_t> es = cn::encodeCodepoint(i);
+
+    for (int i = 0; i < es.size(); i++) {
+      res[i] = es[i];
+    }
+    } |]
+
+  outVec <- V.freeze inVec
+  let res = map fromIntegral (V.toList outVec)
+  return $ filter (/= -1) res
+
+-- brittany-disable-next-binding
+decodeToCodepoint :: [Int] -> IO Int
+decodeToCodepoint xs = do
+  inVec <- V.thaw (V.fromList $ map fromIntegral xs :: V.Vector CInt)
+  let len = fromIntegral (length xs) :: CInt
+
+
+  fromIntegral <$> [C.block| int {
+    int* xs = $vec-ptr:(int *inVec);
+    int len = $(int len);
+
+    vector<uint8_t> us = {};
+    for (int i = 0; i < len; i++) {
+      us.push_back(xs[i]);
+    }
+
+    auto res = cn::decodeToCodepoint(us);
+
+    return res;
+    } |]

@@ -95,7 +95,7 @@ namespace cn {
         return res;
     }
 
-    uint32_t encodeCodepoint(const vector<uint8_t> &bs) {
+    uint32_t decodeToCodepoint(const vector<uint8_t> &bs) {
         if (bs.empty() || bs.size() > 4)
             return 0;
 

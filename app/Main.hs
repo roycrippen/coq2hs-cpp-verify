@@ -5,6 +5,7 @@ import qualified HsLib                         as HS
 import qualified Data.ByteString.Char8         as C
 import           Text.Printf                    ( printf )
 import           Data.Foldable                  ( for_ )
+import           Numeric                        ( showHex )
 
 main :: IO ()
 main = do
@@ -51,10 +52,11 @@ main = do
     putStrLn $ "encoded string from hs = " ++ show s2
     putStrLn $ "decoded string from hs = " ++ show s3
 
-    putStrLn ""
+    putStrLn "\nHaskell encoding"
     putStrLn "Character  Unicode  UTF-8 encoding (hex)  Decoded"
     putStrLn "-------------------------------------------------"
-    for_ [0x0041, 0x00F6, 0x0416, 0x20AC, 0x1D11E] $ \codepoint -> do
+    let cps = [0x0041, 0x00F6, 0x0416, 0x20AC, 0x1D11E]
+    for_ cps $ \codepoint -> do
         let values     = HS.encodeCodepoint codepoint
             codepoint' = HS.decodeToCodepoint values
         putStrLn $ printf "%c          %-7s  %-20s  %c"
@@ -62,3 +64,21 @@ main = do
                           (printf "U+%04X" codepoint :: String)
                           (unwords (map (printf "%02X") values))
                           codepoint'
+
+    putStrLn "\n C++ encoding"
+    putStrLn "Character  Unicode  UTF-8 encoding (hex)  Decoded"
+    putStrLn "-------------------------------------------------"
+    for_ [0x0041, 0x00F6, 0x0416, 0x20AC, 0x1D11E] $ \codepoint -> do
+        values     <- CPP.encodeCodepoint codepoint
+        codepoint' <- CPP.decodeToCodepoint values
+        putStrLn $ printf "%c          %-7s  %-20s  %c"
+                            codepoint
+                            (printf "U+%04X" codepoint :: String)
+                            (unwords (map (printf "%02X") values))
+                            codepoint'
+
+    -- putStrLn ""
+    -- for_ cps $ \codepoint -> do
+    --     xs <- CPP.encodeCodepoint codepoint
+    --     putStrLn $ "cpp unicode to utf8 = " ++ show (map (`showHex` "") xs)
+

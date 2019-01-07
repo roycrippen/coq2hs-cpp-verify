@@ -14,7 +14,12 @@
 --   correctness.
 module HsLib
 
--- | Square a number.
+-- | Square a number. For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; square 9
+--   81
+--   </pre>
 square :: Num a => a -> a
 
 -- | Test whether a, b and c form a Pythagorean triple given that a &lt; b
@@ -33,7 +38,7 @@ isTriple :: Int -> Int -> Int -> Bool
 --   the random triple values generated are valid Pythagorean triples.
 triples :: [(Int, Int, Int)]
 
--- | Used to encode or decode a message with XOR and key. For example,
+-- | Encode or decode a message with XOR and key. For example,
 --   
 --   <pre>
 --   &gt;&gt;&gt; import qualified Data.ByteString.Char8 as C
@@ -46,17 +51,56 @@ triples :: [(Int, Int, Int)]
 --   </pre>
 applyXorCipher :: ByteString -> ByteString -> ByteString
 
+-- | Encode Unicode code-points to UTF-8 from
+--   <a>https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell</a>
+--   For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; encodeCodepoint 0x00F6
+--   [195,182]
+--   
+--   &gt;&gt;&gt; encodeCodepoint 0x1D11E
+--   [240,157,132,158]
+--   </pre>
+encodeCodepoint :: Int -> [Int]
+
+-- | Decode UTF-8 to Unicode code-points from
+--   <a>https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell</a>
+--   For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; showHex  (decodeToCodepoint [195,182]) ""
+--   "F6"
+--   
+--   &gt;&gt;&gt; showHex  (decodeToCodepoint [240,157,132,158]) ""
+--   "1d11e"
+--   </pre>
+decodeToCodepoint :: [Int] -> Int
+
 
 -- | Haskell wrapper functions for using CPP directly as inline source
 --   code.
 module InlineCPP
 
 -- | Inline call to CPP function cn::square. Equivalent to HS function
---   <a>square</a>
+--   <a>square</a>. For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; square 9
+--   81
+--   </pre>
 square :: CInt -> IO CInt
 
 -- | Inline call to CPP function cn::isTriple. Equivalent to HS function
---   <a>isTriple</a>.
+--   <a>isTriple</a>. For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; isTriple 7 24 25
+--   True
+--   
+--   &gt;&gt;&gt; isTriple 7 24 26
+--   False
+--   </pre>
 isTriple :: CInt -> CInt -> CInt -> IO CInt
 
 -- | Inline CPP that sums items in a HS list. For example,
@@ -78,7 +122,14 @@ rangeList :: Int -> IO [Int]
 
 -- | Inline CPP calls cn::applyXorCipher twice to encoded then decode a
 --   message. Demonstrates use of cout and successful round trip use of the
---   XOR cipher.
+--   XOR cipher. For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; testApplyXorCipher
+--   This is message from cpp std::cout.
+--   std::cout -&gt; (cs, key): ('This is the test string...', 'cipher key 123')'
+--   std::cout -&gt; applyXorCipher(applyXorCipher(cs, key), key): 'This is the test string...'
+--   </pre>
 testApplyXorCipher :: IO ()
 
 -- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS

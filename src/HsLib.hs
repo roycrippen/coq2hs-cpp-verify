@@ -19,7 +19,10 @@ import qualified Data.ByteString.Char8         as C
 import qualified Data.Text                     as Text
 import qualified Data.Text.Encoding            as Text
 
--- | Square a number.
+-- | Square a number. For example,
+--
+-- >>> square 9
+-- 81
 square :: Num a => a -> a
 square x = x * x
 
@@ -70,12 +73,24 @@ applyXorCipher msg key = B.pack (B.zipWith xor msg keys)
 
 -- | Encode Unicode code-points to UTF-8
 -- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell
+-- For example,
+--
+-- >>> encodeCodepoint 0x00F6
+-- [195,182]
+-- >>> encodeCodepoint 0x1D11E
+-- [240,157,132,158]
 encodeCodepoint :: Int -> [Int]
 encodeCodepoint =
     map fromIntegral . B.unpack . Text.encodeUtf8 . Text.singleton . chr
 
 -- | Decode UTF-8 to Unicode code-points
 -- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell
+-- For example,
+--
+-- >>>  showHex  (decodeToCodepoint [195,182]) ""
+-- "F6"
+-- >>> showHex  (decodeToCodepoint [240,157,132,158]) ""
+-- "1d11e"
 decodeToCodepoint :: [Int] -> Int
 decodeToCodepoint =
     ord . Text.head . Text.decodeUtf8 . B.pack . map fromIntegral

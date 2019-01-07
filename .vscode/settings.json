@@ -47,7 +47,8 @@
     "memcpy",
     "printf",
     "quickcheck",
-    "sqaure"
+    "sqaure",
+    "uint"
   ],
   "cSpell.language": "en"
 }
