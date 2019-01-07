@@ -193,7 +193,6 @@ decodeToCodepoint xs = do
   inVec <- V.thaw (V.fromList $ map fromIntegral xs :: V.Vector CInt)
   let len = fromIntegral (length xs) :: CInt
 
-
   fromIntegral <$> [C.block| int {
     int* xs = $vec-ptr:(int *inVec);
     int len = $(int len);

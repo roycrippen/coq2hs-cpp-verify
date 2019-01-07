@@ -65,7 +65,7 @@ main = do
                           (unwords (map (printf "%02X") values))
                           codepoint'
 
-    putStrLn "\n C++ encoding"
+    putStrLn "\nC++ encoding"
     putStrLn "Character  Unicode  UTF-8 encoding (hex)  Decoded"
     putStrLn "-------------------------------------------------"
     for_ [0x0041, 0x00F6, 0x0416, 0x20AC, 0x1D11E] $ \codepoint -> do
