@@ -106,6 +106,3 @@ Haskell checking CPP
 +++ OK, passed 10000 tests.
   quickcheck: HS.square a == CPP.square a
 ```
-
-### Todo
-- 
