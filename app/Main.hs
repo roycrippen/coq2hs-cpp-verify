@@ -3,9 +3,9 @@ module Main where
 import qualified InlineCPP                     as CPP
 import qualified HsLib                         as HS
 import qualified Data.ByteString.Char8         as C
-import           Text.Printf                    ( printf )
-import           Data.Foldable                  ( for_ )
-import           Numeric                        ( showHex )
+import           Text.Printf                              ( printf )
+import           Data.Foldable                            ( for_ )
+import           Numeric                                  ( showHex )
 
 main :: IO ()
 main = do
@@ -52,6 +52,7 @@ main = do
     putStrLn $ "encoded string from hs = " ++ show s2
     putStrLn $ "decoded string from hs = " ++ show s3
 
+    -- call  Haskell code-point -> utf8 and utf8 to code-point
     putStrLn "\nHaskell encoding"
     putStrLn "Character  Unicode  UTF-8 encoding (hex)  Decoded"
     putStrLn "-------------------------------------------------"
@@ -65,6 +66,7 @@ main = do
                           (unwords (map (printf "%02X") values))
                           codepoint'
 
+    -- call  C++ code-point -> utf8 and utf8 to code-point
     putStrLn "\nC++ encoding"
     putStrLn "Character  Unicode  UTF-8 encoding (hex)  Decoded"
     putStrLn "-------------------------------------------------"
@@ -72,13 +74,8 @@ main = do
         values     <- CPP.encodeCodepoint codepoint
         codepoint' <- CPP.decodeToCodepoint values
         putStrLn $ printf "%c          %-7s  %-20s  %c"
-                            codepoint
-                            (printf "U+%04X" codepoint :: String)
-                            (unwords (map (printf "%02X") values))
-                            codepoint'
-
-    -- putStrLn ""
-    -- for_ cps $ \codepoint -> do
-    --     xs <- CPP.encodeCodepoint codepoint
-    --     putStrLn $ "cpp unicode to utf8 = " ++ show (map (`showHex` "") xs)
+                          codepoint
+                          (printf "U+%04X" codepoint :: String)
+                          (unwords (map (printf "%02X") values))
+                          codepoint'
 

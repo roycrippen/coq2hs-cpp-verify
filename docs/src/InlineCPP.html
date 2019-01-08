@@ -10,58 +10,63 @@
 </span><a name="line-10"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="InlineCPP.html#rangeList"><span class="hs-identifier hs-var">rangeList</span></a><span>
 </span><a name="line-11"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="InlineCPP.html#testApplyXorCipher"><span class="hs-identifier hs-var">testApplyXorCipher</span></a><span>
 </span><a name="line-12"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="InlineCPP.html#applyXorCipher"><span class="hs-identifier hs-var">applyXorCipher</span></a><span>
-</span><a name="line-13"></a><span>  </span><span class="hs-special">)</span><span>
-</span><a name="line-14"></a><span class="hs-keyword">where</span><span>
-</span><a name="line-15"></a><span>
-</span><a name="line-16"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.ByteString</span><span>                </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span> </span><span class="hs-special">)</span><span>
-</span><a name="line-17"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.Monoid</span><span>                    </span><span class="hs-special">(</span><span> </span><span class="hs-special">(</span><span class="hs-operator hs-var">&lt;&gt;</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
-</span><a name="line-18"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Foreign.C.Types</span><span>                </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-special">)</span><span>
-</span><a name="line-19"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Foreign.Marshal.Alloc</span><span>          </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-var">free</span><span> </span><span class="hs-special">)</span><span>
-</span><a name="line-20"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Foreign.Marshal.Array</span><span>          </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-var">peekArray</span><span> </span><span class="hs-special">)</span><span>
-</span><a name="line-21"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.ByteString</span><span>               </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">B</span><span>
-</span><a name="line-22"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.ByteString.Unsafe</span><span>        </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">BU</span><span>
-</span><a name="line-23"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.Vector.Storable</span><span>          </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">V</span><span>
-</span><a name="line-24"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Language.C.Inline.Cpp</span><span>         </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">C</span><span>
-</span><a name="line-25"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="HsLib.html"><span class="hs-identifier">HsLib</span></a><span>                         </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">HS</span><span>
-</span><a name="line-26"></a><span>
-</span><a name="line-27"></a><span class="hs-identifier">C.context</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">C.cppCtx</span><span> </span><span class="hs-operator">&lt;&gt;</span><span> </span><span class="hs-identifier">C.vecCtx</span><span class="hs-special">)</span><span>
-</span><a name="line-28"></a><span class="hs-identifier">C.include</span><span> </span><span class="hs-string">&quot;&lt;iostream&gt;&quot;</span><span>
-</span><a name="line-29"></a><span class="hs-identifier">C.include</span><span> </span><span class="hs-string">&quot;&lt;cstring&gt;&quot;</span><span>
-</span><a name="line-30"></a><span class="hs-identifier">C.include</span><span> </span><span class="hs-string">&quot;../cpp/include/candidates.hpp&quot;</span><span>
+</span><a name="line-13"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="InlineCPP.html#encodeCodepoint"><span class="hs-identifier hs-var">encodeCodepoint</span></a><span>
+</span><a name="line-14"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="InlineCPP.html#decodeToCodepoint"><span class="hs-identifier hs-var">decodeToCodepoint</span></a><span>
+</span><a name="line-15"></a><span>  </span><span class="hs-special">)</span><span>
+</span><a name="line-16"></a><span class="hs-keyword">where</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.ByteString</span><span>                          </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-19"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Data.Monoid</span><span>                              </span><span class="hs-special">(</span><span> </span><span class="hs-special">(</span><span class="hs-operator hs-var">&lt;&gt;</span><span class="hs-special">)</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-20"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Foreign.C.Types</span><span>                          </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-21"></a><span>                                                          </span><span class="hs-special">,</span><span> </span><span class="hs-identifier hs-type">CUChar</span><span>
+</span><a name="line-22"></a><span>                                                          </span><span class="hs-special">)</span><span>
+</span><a name="line-23"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Foreign.Marshal.Alloc</span><span>                    </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-var">free</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-24"></a><span class="hs-keyword">import</span><span>           </span><span class="hs-identifier">Foreign.Marshal.Array</span><span>                    </span><span class="hs-special">(</span><span> </span><span class="hs-identifier hs-var">peekArray</span><span> </span><span class="hs-special">)</span><span>
+</span><a name="line-25"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.ByteString</span><span>               </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">B</span><span>
+</span><a name="line-26"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.ByteString.Unsafe</span><span>        </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">BU</span><span>
+</span><a name="line-27"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.Vector.Storable</span><span>          </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">V</span><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Data.Vector.Storable.Mutable</span><span>  </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">VM</span><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">Language.C.Inline.Cpp</span><span>         </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">C</span><span>
+</span><a name="line-30"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="HsLib.html"><span class="hs-identifier">HsLib</span></a><span>                         </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">HS</span><span>
 </span><a name="line-31"></a><span>
-</span><a name="line-32"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
-</span><a name="line-33"></a><span class="hs-comment">-- | Inline call to CPP function cn::square.</span><span>
-</span><a name="line-34"></a><span class="hs-comment">--  Equivalent to HS function 'HS.square'. For example,</span><span>
-</span><a name="line-35"></a><span class="hs-comment">--</span><span>
-</span><a name="line-36"></a><span class="hs-comment">-- &gt;&gt;&gt; square 9</span><span>
-</span><a name="line-37"></a><span class="hs-comment">-- 81</span><span>
-</span><a name="line-38"></a><span class="hs-identifier">square</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
-</span><a name="line-39"></a><a name="square"><a href="InlineCPP.html#square"><span class="hs-identifier">square</span></a></a><span> </span><a name="local-6989586621679052175"><a href="#local-6989586621679052175"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="">[C.exp| int { cn::square($(int x)) } |]</span><span>
-</span><a name="line-40"></a><span>
-</span><a name="line-41"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
-</span><a name="line-42"></a><span class="hs-comment">-- | Inline call to CPP function cn::isTriple. </span><span>
-</span><a name="line-43"></a><span class="hs-comment">--  Equivalent to HS function 'HS.isTriple'. For example,</span><span>
-</span><a name="line-44"></a><span class="hs-comment">--</span><span>
-</span><a name="line-45"></a><span class="hs-comment">-- &gt;&gt;&gt; isTriple 7 24 25</span><span>
-</span><a name="line-46"></a><span class="hs-comment">-- True</span><span>
-</span><a name="line-47"></a><span class="hs-comment">-- &gt;&gt;&gt; isTriple 7 24 26</span><span>
-</span><a name="line-48"></a><span class="hs-comment">-- False</span><span>
-</span><a name="line-49"></a><span class="hs-identifier">isTriple</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
-</span><a name="line-50"></a><a name="isTriple"><a href="InlineCPP.html#isTriple"><span class="hs-identifier">isTriple</span></a></a><span> </span><a name="local-6989586621679052302"><a href="#local-6989586621679052302"><span class="hs-identifier">a</span></a></a><span> </span><a name="local-6989586621679052303"><a href="#local-6989586621679052303"><span class="hs-identifier">b</span></a></a><span> </span><a name="local-6989586621679052304"><a href="#local-6989586621679052304"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">=</span><span>
-</span><a name="line-51"></a><span>   </span><span class="">[C.exp| int { cn::is_pythagorean_triple($(int a), $(int b), $(int c)) } |]</span><span>
-</span><a name="line-52"></a><span>
-</span><a name="line-53"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
-</span><a name="line-54"></a><span class="hs-comment">-- | Inline CPP that sums items in a HS list. For example,</span><span>
-</span><a name="line-55"></a><span class="hs-comment">--</span><span>
-</span><a name="line-56"></a><span class="hs-comment">-- &gt;&gt;&gt; sumVec [10,20,30]</span><span>
-</span><a name="line-57"></a><span class="hs-comment">-- 100</span><span>
-</span><a name="line-58"></a><span class="hs-identifier">sumVec</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-type">CInt</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
-</span><a name="line-59"></a><a name="sumVec"><a href="InlineCPP.html#sumVec"><span class="hs-identifier">sumVec</span></a></a><span> </span><a name="local-6989586621679052317"><a href="#local-6989586621679052317"><span class="hs-identifier">xs</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><a name="line-60"></a><span>  </span><span class="hs-comment">-- create mutable vector that cpp block can reference</span><span>
-</span><a name="line-61"></a><span>  </span><a name="local-6989586621679052318"><a href="#local-6989586621679052318"><span class="hs-identifier">vec</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.thaw</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">V.fromList</span><span> </span><a href="#local-6989586621679052317"><span class="hs-identifier hs-var">xs</span></a><span class="hs-special">)</span><span>
-</span><a name="line-62"></a><span>
-</span><a name="line-63"></a><span>  </span><span class="hs-comment">-- cpp code to sum the list </span><span>
-</span><a name="line-64"></a><span>  </span><a name="local-6989586621679052330"><a href="#local-6989586621679052330"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="">[C.block| int {
+</span><a name="line-32"></a><span class="hs-identifier">C.context</span><span> </span><span class="hs-special">(</span><span class="hs-identifier">C.cppCtx</span><span> </span><span class="hs-operator">&lt;&gt;</span><span> </span><span class="hs-identifier">C.vecCtx</span><span class="hs-special">)</span><span>
+</span><a name="line-33"></a><span class="hs-identifier">C.include</span><span> </span><span class="hs-string">&quot;&lt;iostream&gt;&quot;</span><span>
+</span><a name="line-34"></a><span class="hs-identifier">C.include</span><span> </span><span class="hs-string">&quot;&lt;cstring&gt;&quot;</span><span>
+</span><a name="line-35"></a><span class="hs-identifier">C.include</span><span> </span><span class="hs-string">&quot;../cpp/include/candidates.hpp&quot;</span><span>
+</span><a name="line-36"></a><span>
+</span><a name="line-37"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- | Inline call to CPP function cn::square.</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--  Equivalent to HS function 'HS.square'. For example,</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- &gt;&gt;&gt; square 9</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- 81</span><span>
+</span><a name="line-43"></a><span class="hs-identifier">square</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-44"></a><a name="square"><a href="InlineCPP.html#square"><span class="hs-identifier">square</span></a></a><span> </span><a name="local-6989586621679052266"><a href="#local-6989586621679052266"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="">[C.exp| int { cn::square($(int x)) } |]</span><span>
+</span><a name="line-45"></a><span>
+</span><a name="line-46"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- | Inline call to CPP function cn::isTriple. </span><span>
+</span><a name="line-48"></a><span class="hs-comment">--  Equivalent to HS function 'HS.isTriple'. For example,</span><span>
+</span><a name="line-49"></a><span class="hs-comment">--</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- &gt;&gt;&gt; isTriple 7 24 25</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- &gt;&gt;&gt; isTriple 7 24 26</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-54"></a><span class="hs-identifier">isTriple</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">CInt</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-55"></a><a name="isTriple"><a href="InlineCPP.html#isTriple"><span class="hs-identifier">isTriple</span></a></a><span> </span><a name="local-6989586621679052393"><a href="#local-6989586621679052393"><span class="hs-identifier">a</span></a></a><span> </span><a name="local-6989586621679052394"><a href="#local-6989586621679052394"><span class="hs-identifier">b</span></a></a><span> </span><a name="local-6989586621679052395"><a href="#local-6989586621679052395"><span class="hs-identifier">c</span></a></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-56"></a><span>   </span><span class="">[C.exp| int { cn::is_pythagorean_triple($(int a), $(int b), $(int c)) } |]</span><span>
+</span><a name="line-57"></a><span>
+</span><a name="line-58"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- | Inline CPP that sums items in a HS list. For example,</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- &gt;&gt;&gt; sumVec [10,20,30]</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- 100</span><span>
+</span><a name="line-63"></a><span class="hs-identifier">sumVec</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-type">CInt</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-64"></a><a name="sumVec"><a href="InlineCPP.html#sumVec"><span class="hs-identifier">sumVec</span></a></a><span> </span><a name="local-6989586621679052408"><a href="#local-6989586621679052408"><span class="hs-identifier">xs</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-65"></a><span>  </span><span class="hs-comment">-- create mutable vector that cpp block can reference</span><span>
+</span><a name="line-66"></a><span>  </span><a name="local-6989586621679052409"><a href="#local-6989586621679052409"><span class="hs-identifier">vec</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.thaw</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">V.fromList</span><span> </span><a href="#local-6989586621679052408"><span class="hs-identifier hs-var">xs</span></a><span class="hs-special">)</span><span>
+</span><a name="line-67"></a><span>
+</span><a name="line-68"></a><span>  </span><span class="hs-comment">-- cpp code to sum the list </span><span>
+</span><a name="line-69"></a><span>  </span><a name="local-6989586621679052421"><a href="#local-6989586621679052421"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="">[C.block| int {
     int* xs = $vec-ptr:(int *vec);
     int len = $vec-len:vec;
 
@@ -71,23 +76,23 @@
     }
     return sum;
   } |]</span><span>
-</span><a name="line-74"></a><span>
-</span><a name="line-75"></a><span>  </span><span class="hs-comment">-- return the sum</span><span>
-</span><a name="line-76"></a><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.freeze</span><span> </span><a href="#local-6989586621679052318"><span class="hs-identifier hs-var">vec</span></a><span>
-</span><a name="line-77"></a><span>  </span><span class="hs-identifier hs-var">return</span><span> </span><a href="#local-6989586621679052330"><span class="hs-identifier hs-var">n</span></a><span>
-</span><a name="line-78"></a><span>
-</span><a name="line-79"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
-</span><a name="line-80"></a><span class="hs-comment">-- | Inline CPP that creates a HS list containing [0 .. (n - 1)]. For example,</span><span>
-</span><a name="line-81"></a><span class="hs-comment">--</span><span>
-</span><a name="line-82"></a><span class="hs-comment">-- &gt;&gt;&gt; rangeList 4</span><span>
-</span><a name="line-83"></a><span class="hs-comment">-- [0,1,2,3]</span><span>
-</span><a name="line-84"></a><span class="hs-identifier">rangeList</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-type">Int</span><span class="hs-special">]</span><span>
-</span><a name="line-85"></a><a name="rangeList"><a href="InlineCPP.html#rangeList"><span class="hs-identifier">rangeList</span></a></a><span> </span><a name="local-6989586621679052331"><a href="#local-6989586621679052331"><span class="hs-identifier">_n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><a name="line-86"></a><span>  </span><span class="hs-comment">-- cast _n from Int to CInt</span><span>
-</span><a name="line-87"></a><span>  </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052332"><a href="#local-6989586621679052332"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052331"><span class="hs-identifier hs-var">_n</span></a><span>
-</span><a name="line-88"></a><span>
-</span><a name="line-89"></a><span>  </span><span class="hs-comment">-- build a list in a cpp block</span><span>
-</span><a name="line-90"></a><span>  </span><a name="local-6989586621679052341"><a href="#local-6989586621679052341"><span class="hs-identifier">arrayPtr</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="">[C.block| int* {
+</span><a name="line-79"></a><span>
+</span><a name="line-80"></a><span>  </span><span class="hs-comment">-- return the sum</span><span>
+</span><a name="line-81"></a><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.freeze</span><span> </span><a href="#local-6989586621679052409"><span class="hs-identifier hs-var">vec</span></a><span>
+</span><a name="line-82"></a><span>  </span><span class="hs-identifier hs-var">return</span><span> </span><a href="#local-6989586621679052421"><span class="hs-identifier hs-var">n</span></a><span>
+</span><a name="line-83"></a><span>
+</span><a name="line-84"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- | Inline CPP that creates a HS list containing [0 .. (n - 1)]. For example,</span><span>
+</span><a name="line-86"></a><span class="hs-comment">--</span><span>
+</span><a name="line-87"></a><span class="hs-comment">-- &gt;&gt;&gt; rangeList 4</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- [0,1,2,3]</span><span>
+</span><a name="line-89"></a><span class="hs-identifier">rangeList</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-type">Int</span><span class="hs-special">]</span><span>
+</span><a name="line-90"></a><a name="rangeList"><a href="InlineCPP.html#rangeList"><span class="hs-identifier">rangeList</span></a></a><span> </span><a name="local-6989586621679052422"><a href="#local-6989586621679052422"><span class="hs-identifier">_n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-91"></a><span>  </span><span class="hs-comment">-- cast _n from Int to CInt</span><span>
+</span><a name="line-92"></a><span>  </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052423"><a href="#local-6989586621679052423"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052422"><span class="hs-identifier hs-var">_n</span></a><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span>  </span><span class="hs-comment">-- build a list in a cpp block</span><span>
+</span><a name="line-95"></a><span>  </span><a name="local-6989586621679052432"><a href="#local-6989586621679052432"><span class="hs-identifier">arrayPtr</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="">[C.block| int* {
     int n_ = $(int n);
     int* mat;
     mat = new int[n_];
@@ -96,24 +101,24 @@
     }
     return mat;
   } |]</span><span>
-</span><a name="line-99"></a><span>
-</span><a name="line-100"></a><span>  </span><span class="hs-comment">-- copy ptr contents to list of Int</span><span>
-</span><a name="line-101"></a><span>  </span><a name="local-6989586621679052342"><a href="#local-6989586621679052342"><span class="hs-identifier">ls</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">peekArray</span><span> </span><a href="#local-6989586621679052331"><span class="hs-identifier hs-var">_n</span></a><span> </span><a href="#local-6989586621679052341"><span class="hs-identifier hs-var">arrayPtr</span></a><span>
-</span><a name="line-102"></a><span>  </span><span class="hs-identifier hs-var">free</span><span> </span><a href="#local-6989586621679052341"><span class="hs-identifier hs-var">arrayPtr</span></a><span>
-</span><a name="line-103"></a><span>  </span><span class="hs-identifier hs-var">return</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-identifier hs-var">map</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052342"><span class="hs-identifier hs-var">ls</span></a><span>
 </span><a name="line-104"></a><span>
-</span><a name="line-105"></a><span>
-</span><a name="line-106"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
-</span><a name="line-107"></a><span class="hs-comment">-- | Inline CPP calls cn::applyXorCipher twice to encoded then decode a message.</span><span>
-</span><a name="line-108"></a><span class="hs-comment">-- Demonstrates use of cout and successful round trip use of the XOR cipher.</span><span>
-</span><a name="line-109"></a><span class="hs-comment">-- For example,</span><span>
-</span><a name="line-110"></a><span class="hs-comment">-- </span><span>
-</span><a name="line-111"></a><span class="hs-comment">-- &gt;&gt;&gt; testApplyXorCipher</span><span>
-</span><a name="line-112"></a><span class="hs-comment">-- This is message from cpp std::cout.</span><span>
-</span><a name="line-113"></a><span class="hs-comment">-- std::cout -&gt; (cs, key): ('This is the test string...', 'cipher key 123')'</span><span>
-</span><a name="line-114"></a><span class="hs-comment">-- std::cout -&gt; applyXorCipher(applyXorCipher(cs, key), key): 'This is the test string...'</span><span>
-</span><a name="line-115"></a><span class="hs-identifier">testApplyXorCipher</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
-</span><a name="line-116"></a><a name="testApplyXorCipher"><a href="InlineCPP.html#testApplyXorCipher"><span class="hs-identifier">testApplyXorCipher</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="">[C.exp| void {
+</span><a name="line-105"></a><span>  </span><span class="hs-comment">-- copy ptr contents to list of Int</span><span>
+</span><a name="line-106"></a><span>  </span><a name="local-6989586621679052433"><a href="#local-6989586621679052433"><span class="hs-identifier">ls</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">peekArray</span><span> </span><a href="#local-6989586621679052422"><span class="hs-identifier hs-var">_n</span></a><span> </span><a href="#local-6989586621679052432"><span class="hs-identifier hs-var">arrayPtr</span></a><span>
+</span><a name="line-107"></a><span>  </span><span class="hs-identifier hs-var">free</span><span> </span><a href="#local-6989586621679052432"><span class="hs-identifier hs-var">arrayPtr</span></a><span>
+</span><a name="line-108"></a><span>  </span><span class="hs-identifier hs-var">return</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-identifier hs-var">map</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052433"><span class="hs-identifier hs-var">ls</span></a><span>
+</span><a name="line-109"></a><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-112"></a><span class="hs-comment">-- | Inline CPP calls cn::applyXorCipher twice to encoded then decode a message.</span><span>
+</span><a name="line-113"></a><span class="hs-comment">-- Demonstrates use of cout and successful round trip use of the XOR cipher.</span><span>
+</span><a name="line-114"></a><span class="hs-comment">-- For example,</span><span>
+</span><a name="line-115"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-116"></a><span class="hs-comment">-- &gt;&gt;&gt; testApplyXorCipher</span><span>
+</span><a name="line-117"></a><span class="hs-comment">-- This is message from cpp std::cout.</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- std::cout -&gt; (cs, key): ('This is the test string...', 'cipher key 123')'</span><span>
+</span><a name="line-119"></a><span class="hs-comment">-- std::cout -&gt; applyXorCipher(applyXorCipher(cs, key), key): 'This is the test string...'</span><span>
+</span><a name="line-120"></a><span class="hs-identifier">testApplyXorCipher</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-121"></a><a name="testApplyXorCipher"><a href="InlineCPP.html#testApplyXorCipher"><span class="hs-identifier">testApplyXorCipher</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="">[C.exp| void {
     cout &lt;&lt; &quot;This is message from cpp std::cout.\n&quot; ;
     auto cs = &quot;This is the test string...&quot;;
     string key = &quot;cipher key 123&quot;;
@@ -121,22 +126,22 @@
     auto orig_str = cn::applyXorCipher(cn::applyXorCipher(cs, key), key);
     cout &lt;&lt; &quot;std::cout -&gt; applyXorCipher(applyXorCipher(cs, key), key): '&quot; &lt;&lt; orig_str &lt;&lt; &quot;'\n&quot;;
   }|]</span><span>
-</span><a name="line-124"></a><span>
-</span><a name="line-125"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
-</span><a name="line-126"></a><span class="hs-comment">-- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS function 'HS.applyXorCipher'.</span><span>
-</span><a name="line-127"></a><span class="hs-comment">-- Used to encode or decode a message with XOR and key. For example,</span><span>
-</span><a name="line-128"></a><span class="hs-comment">--</span><span>
-</span><a name="line-129"></a><span class="hs-comment">-- &gt;&gt;&gt; import qualified Data.ByteString.Char8 as C</span><span>
-</span><a name="line-130"></a><span class="hs-comment">-- &gt;&gt;&gt; applyXorCipher (C.pack &quot;message&quot;) (C.pack &quot;my key&quot;)</span><span>
-</span><a name="line-131"></a><span class="hs-comment">-- &quot;\NUL\FSS\CAN\EOT\RS\b&quot;</span><span>
-</span><a name="line-132"></a><span class="hs-comment">-- &gt;&gt;&gt;  applyXorCipher (C.pack &quot;\NUL\FSS\CAN\EOT\RS\b&quot;) (C.pack &quot;my key&quot;)</span><span>
-</span><a name="line-133"></a><span class="hs-comment">-- &quot;message&quot;</span><span>
-</span><a name="line-134"></a><span class="hs-identifier">applyXorCipher</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span>
-</span><a name="line-135"></a><a name="applyXorCipher"><a href="InlineCPP.html#applyXorCipher"><span class="hs-identifier">applyXorCipher</span></a></a><span> </span><a name="local-6989586621679052349"><a href="#local-6989586621679052349"><span class="hs-identifier">msg</span></a></a><span> </span><a name="local-6989586621679052350"><a href="#local-6989586621679052350"><span class="hs-identifier">key</span></a></a><span> </span><span class="hs-glyph">=</span><span>  </span><span class="hs-keyword">do</span><span>
-</span><a name="line-136"></a><span>  </span><span class="hs-special">(</span><a name="local-6989586621679052368"><a href="#local-6989586621679052368"><span class="hs-identifier">res</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679052369"><a href="#local-6989586621679052369"><span class="hs-identifier">size</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">BU.unsafeUseAsCStringLen</span><span> </span><a href="#local-6989586621679052349"><span class="hs-identifier hs-var">msg</span></a><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><a name="local-6989586621679052351"><a href="#local-6989586621679052351"><span class="hs-identifier">cStrIn</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679052352"><a href="#local-6989586621679052352"><span class="hs-identifier">cStrInLength</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
-</span><a name="line-137"></a><span>    </span><span class="hs-identifier hs-var">BU.unsafeUseAsCString</span><span> </span><a href="#local-6989586621679052350"><span class="hs-identifier hs-var">key</span></a><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679052353"><a href="#local-6989586621679052353"><span class="hs-identifier">cStrKey</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
-</span><a name="line-138"></a><span>      </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052354"><a href="#local-6989586621679052354"><span class="hs-identifier">nCInt</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052352"><span class="hs-identifier hs-var">cStrInLength</span></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
-</span><a name="line-139"></a><span>      </span><a name="local-6989586621679052367"><a href="#local-6989586621679052367"><span class="hs-identifier">cStrOut</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="">[C.block| char* {
+</span><a name="line-129"></a><span>
+</span><a name="line-130"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-131"></a><span class="hs-comment">-- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS function 'HS.applyXorCipher'.</span><span>
+</span><a name="line-132"></a><span class="hs-comment">-- Used to encode or decode a message with XOR and key. For example,</span><span>
+</span><a name="line-133"></a><span class="hs-comment">--</span><span>
+</span><a name="line-134"></a><span class="hs-comment">-- &gt;&gt;&gt; import qualified Data.ByteString.Char8 as C</span><span>
+</span><a name="line-135"></a><span class="hs-comment">-- &gt;&gt;&gt; applyXorCipher (C.pack &quot;message&quot;) (C.pack &quot;my key&quot;)</span><span>
+</span><a name="line-136"></a><span class="hs-comment">-- &quot;\NUL\FSS\CAN\EOT\RS\b&quot;</span><span>
+</span><a name="line-137"></a><span class="hs-comment">-- &gt;&gt;&gt;  applyXorCipher (C.pack &quot;\NUL\FSS\CAN\EOT\RS\b&quot;) (C.pack &quot;my key&quot;)</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- &quot;message&quot;</span><span>
+</span><a name="line-139"></a><span class="hs-identifier">applyXorCipher</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">ByteString</span><span>
+</span><a name="line-140"></a><a name="applyXorCipher"><a href="InlineCPP.html#applyXorCipher"><span class="hs-identifier">applyXorCipher</span></a></a><span> </span><a name="local-6989586621679052440"><a href="#local-6989586621679052440"><span class="hs-identifier">msg</span></a></a><span> </span><a name="local-6989586621679052441"><a href="#local-6989586621679052441"><span class="hs-identifier">key</span></a></a><span> </span><span class="hs-glyph">=</span><span>  </span><span class="hs-keyword">do</span><span>
+</span><a name="line-141"></a><span>  </span><span class="hs-special">(</span><a name="local-6989586621679052459"><a href="#local-6989586621679052459"><span class="hs-identifier">res</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679052460"><a href="#local-6989586621679052460"><span class="hs-identifier">size</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">BU.unsafeUseAsCStringLen</span><span> </span><a href="#local-6989586621679052440"><span class="hs-identifier hs-var">msg</span></a><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><a name="local-6989586621679052442"><a href="#local-6989586621679052442"><span class="hs-identifier">cStrIn</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679052443"><a href="#local-6989586621679052443"><span class="hs-identifier">cStrInLength</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-142"></a><span>    </span><span class="hs-identifier hs-var">BU.unsafeUseAsCString</span><span> </span><a href="#local-6989586621679052441"><span class="hs-identifier hs-var">key</span></a><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679052444"><a href="#local-6989586621679052444"><span class="hs-identifier">cStrKey</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-143"></a><span>      </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052445"><a href="#local-6989586621679052445"><span class="hs-identifier">nCInt</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052443"><span class="hs-identifier hs-var">cStrInLength</span></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-144"></a><span>      </span><a name="local-6989586621679052458"><a href="#local-6989586621679052458"><span class="hs-identifier">cStrOut</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="">[C.block| char* {
         // rename inputs to more readable names
         char *cStrIn = $(char *cStrIn);
         char *key = $(char *cStrKey);
@@ -156,9 +161,69 @@
         std::memcpy(cstr, ds.data(), n);
         return cstr;
       }|]</span><span>
-</span><a name="line-159"></a><span>      </span><span class="hs-identifier hs-var">return</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679052367"><span class="hs-identifier hs-var">cStrOut</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679052352"><span class="hs-identifier hs-var">cStrInLength</span></a><span class="hs-special">)</span><span>
-</span><a name="line-160"></a><span>
-</span><a name="line-161"></a><span>  </span><span class="hs-identifier hs-var">B.packCStringLen</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679052368"><span class="hs-identifier hs-var">res</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679052369"><span class="hs-identifier hs-var">size</span></a><span class="hs-special">)</span><span>
-</span><a name="line-162"></a><span>
-</span><a name="line-163"></a><span>
-</span><a name="line-164"></a></pre></body></html>
+</span><a name="line-164"></a><span>      </span><span class="hs-identifier hs-var">return</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679052458"><span class="hs-identifier hs-var">cStrOut</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679052443"><span class="hs-identifier hs-var">cStrInLength</span></a><span class="hs-special">)</span><span>
+</span><a name="line-165"></a><span>
+</span><a name="line-166"></a><span>  </span><span class="hs-identifier hs-var">B.packCStringLen</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679052459"><span class="hs-identifier hs-var">res</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679052460"><span class="hs-identifier hs-var">size</span></a><span class="hs-special">)</span><span>
+</span><a name="line-167"></a><span>
+</span><a name="line-168"></a><span>
+</span><a name="line-169"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-170"></a><span class="hs-comment">-- | Inline call to CPP function cn::applyXorCipher. </span><span>
+</span><a name="line-171"></a><span class="hs-comment">-- Equivalent to HS function 'HS.encodeCodepoint'.  </span><span>
+</span><a name="line-172"></a><span class="hs-comment">-- Encode Unicode code-points to UTF-8.  </span><span>
+</span><a name="line-173"></a><span class="hs-comment">-- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go </span><span>
+</span><a name="line-174"></a><span class="hs-comment">-- For example,</span><span>
+</span><a name="line-175"></a><span class="hs-comment">--</span><span>
+</span><a name="line-176"></a><span class="hs-comment">-- &gt;&gt;&gt; encodeCodepoint 0x00F6</span><span>
+</span><a name="line-177"></a><span class="hs-comment">-- [195,182]</span><span>
+</span><a name="line-178"></a><span class="hs-comment">-- &gt;&gt;&gt; encodeCodepoint 0x1D11E</span><span>
+</span><a name="line-179"></a><span class="hs-comment">-- [240,157,132,158]</span><span>
+</span><a name="line-180"></a><span class="hs-identifier">encodeCodepoint</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-type">Int</span><span class="hs-special">]</span><span>
+</span><a name="line-181"></a><a name="encodeCodepoint"><a href="InlineCPP.html#encodeCodepoint"><span class="hs-identifier">encodeCodepoint</span></a></a><span> </span><a name="local-6989586621679052461"><a href="#local-6989586621679052461"><span class="hs-identifier">_n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-182"></a><span>  </span><a name="local-6989586621679052462"><a href="#local-6989586621679052462"><span class="hs-identifier">inVec</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.thaw</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">V.fromList</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-glyph">-</span><span class="hs-number">1</span><span class="hs-special">,</span><span class="hs-glyph">-</span><span class="hs-number">1</span><span class="hs-special">,</span><span class="hs-glyph">-</span><span class="hs-number">1</span><span class="hs-special">,</span><span class="hs-glyph">-</span><span class="hs-number">1</span><span class="hs-special">]</span><span class="hs-glyph">::</span><span class="hs-special">[</span><span class="hs-identifier hs-type">CInt</span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-183"></a><span>  </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052463"><a href="#local-6989586621679052463"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052461"><span class="hs-identifier hs-var">_n</span></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-184"></a><span>
+</span><a name="line-185"></a><span>  </span><span class="">[C.block| void {
+    int* res = $vec-ptr:(int *inVec);
+    auto i = static_cast&lt;uint32_t&gt;($(int n));
+
+    vector&lt;uint8_t&gt; es = cn::encodeCodepoint(i);
+
+    for (int i = 0; i &lt; es.size(); i++) {
+      res[i] = es[i];
+    }
+    } |]</span><span>
+</span><a name="line-195"></a><span>
+</span><a name="line-196"></a><span>  </span><a name="local-6989586621679052473"><a href="#local-6989586621679052473"><span class="hs-identifier">outVec</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.freeze</span><span> </span><a href="#local-6989586621679052462"><span class="hs-identifier hs-var">inVec</span></a><span>
+</span><a name="line-197"></a><span>  </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052474"><a href="#local-6989586621679052474"><span class="hs-identifier">res</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">map</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">V.toList</span><span> </span><a href="#local-6989586621679052473"><span class="hs-identifier hs-var">outVec</span></a><span class="hs-special">)</span><span>
+</span><a name="line-198"></a><span>  </span><span class="hs-identifier hs-var">return</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-identifier hs-var">filter</span><span> </span><span class="hs-special">(</span><span class="hs-operator hs-var">/=</span><span> </span><span class="hs-glyph">-</span><span class="hs-number">1</span><span class="hs-special">)</span><span> </span><a href="#local-6989586621679052474"><span class="hs-identifier hs-var">res</span></a><span>
+</span><a name="line-199"></a><span>
+</span><a name="line-200"></a><span class="hs-comment">-- brittany-disable-next-binding</span><span>
+</span><a name="line-201"></a><span class="hs-comment">-- | Inline call to CPP function cn::applyXorCipher. </span><span>
+</span><a name="line-202"></a><span class="hs-comment">-- Equivalent to HS function 'HS.decodeToCodepoint'. </span><span>
+</span><a name="line-203"></a><span class="hs-comment">-- Decode UTF-8 to Unicode code-points. </span><span>
+</span><a name="line-204"></a><span class="hs-comment">-- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go </span><span>
+</span><a name="line-205"></a><span class="hs-comment">-- For example,</span><span>
+</span><a name="line-206"></a><span class="hs-comment">--</span><span>
+</span><a name="line-207"></a><span class="hs-comment">-- &gt;&gt;&gt;  showHex  (decodeToCodepoint [195,182]) &quot;&quot;</span><span>
+</span><a name="line-208"></a><span class="hs-comment">-- &quot;F6&quot;</span><span>
+</span><a name="line-209"></a><span class="hs-comment">-- &gt;&gt;&gt; showHex  (decodeToCodepoint [240,157,132,158]) &quot;&quot;</span><span>
+</span><a name="line-210"></a><span class="hs-comment">-- &quot;1d11e&quot;</span><span>
+</span><a name="line-211"></a><span class="hs-identifier">decodeToCodepoint</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-identifier hs-type">Int</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-identifier hs-type">IO</span><span> </span><span class="hs-identifier hs-type">Int</span><span>
+</span><a name="line-212"></a><a name="decodeToCodepoint"><a href="InlineCPP.html#decodeToCodepoint"><span class="hs-identifier">decodeToCodepoint</span></a></a><span> </span><a name="local-6989586621679052475"><a href="#local-6989586621679052475"><span class="hs-identifier">xs</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-213"></a><span>  </span><a name="local-6989586621679052476"><a href="#local-6989586621679052476"><span class="hs-identifier">inVec</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="hs-identifier hs-var">V.thaw</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">V.fromList</span><span> </span><span class="hs-operator hs-var">$</span><span> </span><span class="hs-identifier hs-var">map</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><a href="#local-6989586621679052475"><span class="hs-identifier hs-var">xs</span></a><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">V.Vector</span><span> </span><span class="hs-identifier hs-type">CInt</span><span class="hs-special">)</span><span>
+</span><a name="line-214"></a><span>  </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679052477"><a href="#local-6989586621679052477"><span class="hs-identifier">len</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-var">length</span><span> </span><a href="#local-6989586621679052475"><span class="hs-identifier hs-var">xs</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">CInt</span><span>
+</span><a name="line-215"></a><span>
+</span><a name="line-216"></a><span>  </span><span class="hs-identifier hs-var">fromIntegral</span><span> </span><span class="hs-operator hs-var">&lt;$&gt;</span><span> </span><span class="">[C.block| int {
+    int* xs = $vec-ptr:(int *inVec);
+    int len = $(int len);
+
+    vector&lt;uint8_t&gt; us = {};
+    for (int i = 0; i &lt; len; i++) {
+      us.push_back(xs[i]);
+    }
+
+    auto res = cn::decodeToCodepoint(us);
+
+    return res;
+    } |]</span><span>
+</span><a name="line-229"></a></pre></body></html>

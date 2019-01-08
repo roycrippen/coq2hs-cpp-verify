@@ -51,7 +51,7 @@ triples :: [(Int, Int, Int)]
 --   </pre>
 applyXorCipher :: ByteString -> ByteString -> ByteString
 
--- | Encode Unicode code-points to UTF-8 from
+-- | Encode Unicode code-points to UTF-8. from
 --   <a>https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell</a>
 --   For example,
 --   
@@ -64,7 +64,7 @@ applyXorCipher :: ByteString -> ByteString -> ByteString
 --   </pre>
 encodeCodepoint :: Int -> [Int]
 
--- | Decode UTF-8 to Unicode code-points from
+-- | Decode UTF-8 to Unicode code-points. from
 --   <a>https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell</a>
 --   For example,
 --   
@@ -146,3 +146,32 @@ testApplyXorCipher :: IO ()
 --   "message"
 --   </pre>
 applyXorCipher :: ByteString -> ByteString -> IO ByteString
+
+-- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS
+--   function <a>encodeCodepoint</a>. Encode Unicode code-points to UTF-8.
+--   from <a>https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go</a>
+--   For example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; encodeCodepoint 0x00F6
+--   [195,182]
+--   
+--   &gt;&gt;&gt; encodeCodepoint 0x1D11E
+--   [240,157,132,158]
+--   </pre>
+encodeCodepoint :: Int -> IO [Int]
+
+-- | Inline call to CPP function cn::applyXorCipher. Equivalent to HS
+--   function <a>decodeToCodepoint</a>. Decode UTF-8 to Unicode
+--   code-points. from
+--   <a>https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go</a> For
+--   example,
+--   
+--   <pre>
+--   &gt;&gt;&gt; showHex  (decodeToCodepoint [195,182]) ""
+--   "F6"
+--   
+--   &gt;&gt;&gt; showHex  (decodeToCodepoint [240,157,132,158]) ""
+--   "1d11e"
+--   </pre>
+decodeToCodepoint :: [Int] -> IO Int

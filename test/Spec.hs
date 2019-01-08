@@ -55,7 +55,6 @@ main = hspec $ do
             $ quickCheck (withMaxSuccess 10000 prop_cppEncodeHSDecodeCodepoint)
 
 
-
 unicodeVal :: Gen Int
 unicodeVal = excluding QCU.reserved (frequency QCU.planes)
 
@@ -125,16 +124,15 @@ prop_hsEncodeDecodeCodepoint = forAll unicodeVal $ \cp ->
         $  HS.decodeToCodepoint (HS.encodeCodepoint cp)
         == cp
 
---
 prop_hsEncodeCppDecodeCodepoint :: Property
 prop_hsEncodeCppDecodeCodepoint = forAll unicodeVal $ \cp -> QCM.monadicIO $ do
     let values = HS.encodeCodepoint cp
     cp' <- QCM.run $ CPP.decodeToCodepoint values
     QCM.assert $ cp' == cp
---
+
 prop_cppEncodeHSDecodeCodepoint :: Property
 prop_cppEncodeHSDecodeCodepoint = forAll unicodeVal $ \cp -> QCM.monadicIO $ do
     values <- QCM.run $ CPP.encodeCodepoint cp
     let cp' = HS.decodeToCodepoint values
     QCM.assert $ cp' == cp
---
+

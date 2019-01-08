@@ -11,13 +11,13 @@
 </code></strong>&quot;\NUL\FSS\CAN\EOT\RS\b&quot;
 <code class="prompt">&gt;&gt;&gt; </code><strong class="userinput"><code>applyXorCipher (C.pack &quot;\NUL\FSS\CAN\EOT\RS\b&quot;) (C.pack &quot;my key&quot;)
 </code></strong>&quot;message&quot;
-</pre></div></div><div class="top"><p class="src"><a id="v:encodeCodepoint" class="def">encodeCodepoint</a> :: <a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a> -&gt; [<a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a>] <a href="src/HsLib.html#encodeCodepoint" class="link">Source</a> <a href="#v:encodeCodepoint" class="selflink">#</a></p><div class="doc"><p>Encode Unicode code-points to UTF-8
+</pre></div></div><div class="top"><p class="src"><a id="v:encodeCodepoint" class="def">encodeCodepoint</a> :: <a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a> -&gt; [<a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a>] <a href="src/HsLib.html#encodeCodepoint" class="link">Source</a> <a href="#v:encodeCodepoint" class="selflink">#</a></p><div class="doc"><p>Encode Unicode code-points to UTF-8.
  from <a href="https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell">https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell</a>
  For example,</p><pre class="screen"><code class="prompt">&gt;&gt;&gt; </code><strong class="userinput"><code>encodeCodepoint 0x00F6
 </code></strong>[195,182]
 <code class="prompt">&gt;&gt;&gt; </code><strong class="userinput"><code>encodeCodepoint 0x1D11E
 </code></strong>[240,157,132,158]
-</pre></div></div><div class="top"><p class="src"><a id="v:decodeToCodepoint" class="def">decodeToCodepoint</a> :: [<a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a>] -&gt; <a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a> <a href="src/HsLib.html#decodeToCodepoint" class="link">Source</a> <a href="#v:decodeToCodepoint" class="selflink">#</a></p><div class="doc"><p>Decode UTF-8 to Unicode code-points
+</pre></div></div><div class="top"><p class="src"><a id="v:decodeToCodepoint" class="def">decodeToCodepoint</a> :: [<a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a>] -&gt; <a href="../base-4.11.1.0/Data-Int.html#t:Int" title="Data.Int">Int</a> <a href="src/HsLib.html#decodeToCodepoint" class="link">Source</a> <a href="#v:decodeToCodepoint" class="selflink">#</a></p><div class="doc"><p>Decode UTF-8 to Unicode code-points.
  from <a href="https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell">https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell</a>
  For example,</p><pre class="screen"><code class="prompt">&gt;&gt;&gt; </code><strong class="userinput"><code>showHex  (decodeToCodepoint [195,182]) &quot;&quot;
 </code></strong>&quot;F6&quot;

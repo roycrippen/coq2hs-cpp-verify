@@ -15,13 +15,13 @@ module InlineCPP
   )
 where
 
-import           Data.ByteString                ( ByteString )
-import           Data.Monoid                    ( (<>) )
-import           Foreign.C.Types                ( CInt
-                                                , CUChar
-                                                )
-import           Foreign.Marshal.Alloc          ( free )
-import           Foreign.Marshal.Array          ( peekArray )
+import           Data.ByteString                          ( ByteString )
+import           Data.Monoid                              ( (<>) )
+import           Foreign.C.Types                          ( CInt
+                                                          , CUChar
+                                                          )
+import           Foreign.Marshal.Alloc                    ( free )
+import           Foreign.Marshal.Array                    ( peekArray )
 import qualified Data.ByteString               as B
 import qualified Data.ByteString.Unsafe        as BU
 import qualified Data.Vector.Storable          as V
@@ -167,6 +167,16 @@ applyXorCipher msg key =  do
 
 
 -- brittany-disable-next-binding
+-- | Inline call to CPP function cn::applyXorCipher. 
+-- Equivalent to HS function 'HS.encodeCodepoint'.  
+-- Encode Unicode code-points to UTF-8.  
+-- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go 
+-- For example,
+--
+-- >>> encodeCodepoint 0x00F6
+-- [195,182]
+-- >>> encodeCodepoint 0x1D11E
+-- [240,157,132,158]
 encodeCodepoint :: Int -> IO [Int]
 encodeCodepoint _n = do
   inVec <- V.thaw (V.fromList ([-1,-1,-1,-1]::[CInt]))
@@ -188,6 +198,16 @@ encodeCodepoint _n = do
   return $ filter (/= -1) res
 
 -- brittany-disable-next-binding
+-- | Inline call to CPP function cn::applyXorCipher. 
+-- Equivalent to HS function 'HS.decodeToCodepoint'. 
+-- Decode UTF-8 to Unicode code-points. 
+-- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Go 
+-- For example,
+--
+-- >>>  showHex  (decodeToCodepoint [195,182]) ""
+-- "F6"
+-- >>> showHex  (decodeToCodepoint [240,157,132,158]) ""
+-- "1d11e"
 decodeToCodepoint :: [Int] -> IO Int
 decodeToCodepoint xs = do
   inVec <- V.thaw (V.fromList $ map fromIntegral xs :: V.Vector CInt)

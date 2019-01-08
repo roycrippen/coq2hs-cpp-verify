@@ -9,11 +9,11 @@ module HsLib
     )
 where
 
-import           Data.Bits                      ( xor )
-import           Data.ByteString                ( ByteString )
-import           Data.Char                      ( chr
-                                                , ord
-                                                )
+import           Data.Bits                                ( xor )
+import           Data.ByteString                          ( ByteString )
+import           Data.Char                                ( chr
+                                                          , ord
+                                                          )
 import qualified Data.ByteString               as B
 import qualified Data.ByteString.Char8         as C
 import qualified Data.Text                     as Text
@@ -71,7 +71,7 @@ applyXorCipher msg key = B.pack (B.zipWith xor msg keys)
     l    = C.length msg `div` C.length key
     keys = C.concat $ replicate (l + 1) key
 
--- | Encode Unicode code-points to UTF-8
+-- | Encode Unicode code-points to UTF-8.
 -- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell
 -- For example,
 --
@@ -83,7 +83,7 @@ encodeCodepoint :: Int -> [Int]
 encodeCodepoint =
     map fromIntegral . B.unpack . Text.encodeUtf8 . Text.singleton . chr
 
--- | Decode UTF-8 to Unicode code-points
+-- | Decode UTF-8 to Unicode code-points.
 -- from https://rosettacode.org/wiki/UTF-8_encode_and_decode#Haskell
 -- For example,
 --
