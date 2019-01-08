@@ -2,8 +2,8 @@ module Main where
 
 import qualified HsLib                         as HS
 import qualified InlineCPP                     as CPP
-import           Control.Monad                  ( (>=>) )
-import           Foreign.C.Types                ( CInt )
+import           Control.Monad                            ( (>=>) )
+import           Foreign.C.Types                          ( CInt )
 import qualified Data.ByteString.Char8         as C
 import qualified Test.QuickCheck.Unicode       as QCU
 import           Test.Hspec
@@ -27,7 +27,7 @@ main = hspec $ do
             $ quickCheck (withMaxSuccess 10000 prop_hsApplyXorCipher)
         it "quickcheck: HS.decodeToCodepoint (HS.encodeCodepoint cp) == cp"
             $ quickCheck (withMaxSuccess 10000 prop_hsEncodeDecodeCodepoint)
-    describe "CPP Functions" $ do
+    describe "\nCPP Functions" $ do
         it "sqaure a negative integer" $ do
             CPP.square (-3) >>= \v -> v `shouldBe` 9
             CPP.square (-0) >>= \v -> v `shouldBe` 0
@@ -43,12 +43,16 @@ main = hspec $ do
             v `shouldBe` 0
         it "quickcheck: CPP.applyXorCipher (CPP.applyXorCipher s k) k == s"
             $ quickCheck (withMaxSuccess 10000 prop_cppApplyXorCipher)
-    describe "Haskell checking CPP, HS.f args == CPP.f args" $ do
+    describe "\nHaskell checking CPP, HS.f args == CPP.f args" $ do
         it "quickcheck: HS.square a == CPP.square a" $ quickCheck prop_square
         it "quickcheck: HS.isTriple a b c == CPP.isTriple a b c"
             $ quickCheck prop_pTriples
         it "quickcheck: HS.applyXorCipher s k == CPP.applyXorCipher s k"
             $ quickCheck (withMaxSuccess 10000 prop_applyXorCipher)
+        it "quickcheck: CPP.decodeToCodepoint(HS.encodeCodepoint cp) == cp"
+            $ quickCheck (withMaxSuccess 10000 prop_hsEncodeCppDecodeCodepoint)
+        it "quickcheck: HS.decodeToCodepoint(CPP.encodeCodepoint cp) == cp"
+            $ quickCheck (withMaxSuccess 10000 prop_cppEncodeHSDecodeCodepoint)
 
 
 
@@ -120,3 +124,17 @@ prop_hsEncodeDecodeCodepoint = forAll unicodeVal $ \cp ->
         $  QCM.assert
         $  HS.decodeToCodepoint (HS.encodeCodepoint cp)
         == cp
+
+--
+prop_hsEncodeCppDecodeCodepoint :: Property
+prop_hsEncodeCppDecodeCodepoint = forAll unicodeVal $ \cp -> QCM.monadicIO $ do
+    let values = HS.encodeCodepoint cp
+    cp' <- QCM.run $ CPP.decodeToCodepoint values
+    QCM.assert $ cp' == cp
+--
+prop_cppEncodeHSDecodeCodepoint :: Property
+prop_cppEncodeHSDecodeCodepoint = forAll unicodeVal $ \cp -> QCM.monadicIO $ do
+    values <- QCM.run $ CPP.encodeCodepoint cp
+    let cp' = HS.decodeToCodepoint values
+    QCM.assert $ cp' == cp
+--

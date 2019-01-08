@@ -48,7 +48,8 @@
     "printf",
     "quickcheck",
     "sqaure",
-    "uint"
+    "uint",
+    "unwords"
   ],
   "cSpell.language": "en"
 }
