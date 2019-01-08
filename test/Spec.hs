@@ -2,8 +2,8 @@ module Main where
 
 import qualified HsLib                         as HS
 import qualified InlineCPP                     as CPP
-import           Control.Monad                            ( (>=>) )
-import           Foreign.C.Types                          ( CInt )
+import           Control.Monad                  ( (>=>) )
+import           Foreign.C.Types                ( CInt )
 import qualified Data.ByteString.Char8         as C
 import qualified Test.QuickCheck.Unicode       as QCU
 import           Test.Hspec

@@ -35,7 +35,6 @@ library
     build-depends:
         base >=4.7 && <5,
         inline-c-cpp >=0.3.0.1,
-        safe-exceptions -any,
         bytestring -any,
         text -any,
         vector -any
@@ -54,7 +53,6 @@ executable coq2hs-cpp-verify
         base >=4.7 && <5,
         coq2hs-cpp-verify -any,
         inline-c-cpp -any,
-        safe-exceptions -any,
         bytestring -any,
         text -any,
         vector -any

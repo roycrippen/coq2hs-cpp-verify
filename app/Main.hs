@@ -3,9 +3,9 @@ module Main where
 import qualified InlineCPP                     as CPP
 import qualified HsLib                         as HS
 import qualified Data.ByteString.Char8         as C
-import           Text.Printf                              ( printf )
-import           Data.Foldable                            ( for_ )
-import           Numeric                                  ( showHex )
+import           Text.Printf                    ( printf )
+import           Data.Foldable                  ( for_ )
+import           Numeric                        ( showHex )
 
 main :: IO ()
 main = do

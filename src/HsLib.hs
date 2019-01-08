@@ -9,11 +9,11 @@ module HsLib
     )
 where
 
-import           Data.Bits                                ( xor )
-import           Data.ByteString                          ( ByteString )
-import           Data.Char                                ( chr
-                                                          , ord
-                                                          )
+import           Data.Bits                      ( xor )
+import           Data.ByteString                ( ByteString )
+import           Data.Char                      ( chr
+                                                , ord
+                                                )
 import qualified Data.ByteString               as B
 import qualified Data.ByteString.Char8         as C
 import qualified Data.Text                     as Text

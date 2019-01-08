@@ -15,13 +15,13 @@ module InlineCPP
   )
 where
 
-import           Data.ByteString                          ( ByteString )
-import           Data.Monoid                              ( (<>) )
-import           Foreign.C.Types                          ( CInt
-                                                          , CUChar
-                                                          )
-import           Foreign.Marshal.Alloc                    ( free )
-import           Foreign.Marshal.Array                    ( peekArray )
+import           Data.ByteString                ( ByteString )
+import           Data.Monoid                    ( (<>) )
+import           Foreign.C.Types                ( CInt
+                                                , CUChar
+                                                )
+import           Foreign.Marshal.Alloc          ( free )
+import           Foreign.Marshal.Array          ( peekArray )
 import qualified Data.ByteString               as B
 import qualified Data.ByteString.Unsafe        as BU
 import qualified Data.Vector.Storable          as V
