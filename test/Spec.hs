@@ -2,25 +2,25 @@ module Main where
 
 import qualified HsLib                         as HS
 import qualified InlineCPP                     as CPP
-import           Control.Monad                  ( (>=>) )
-import           Foreign.C.Types                ( CInt )
-import qualified Data.ByteString.Char8         as C
+import           Control.Monad                            ( (>=>) )
+import           Foreign.C.Types                          ( CInt )
+import qualified Data.ByteString.Char8         as BS
 import qualified Test.QuickCheck.Unicode       as QCU
 import           Test.Hspec
 import           Test.QuickCheck
-import           Test.QuickCheck.Instances
+import           Test.QuickCheck.Instances                ( )
 import qualified Test.QuickCheck.Monadic       as QCM
 
 main :: IO ()
 main = hspec $ do
     describe "HS functions" $ do
         it "square a negative integer" $ do
-            HS.square (-3) `shouldBe` 9
-            HS.square (-0) `shouldBe` 0
-            HS.square (-81) `shouldBe` HS.square 81
+            HS.square (-3 :: Int) `shouldBe` 9
+            HS.square (-0 :: Int) `shouldBe` 0
+            HS.square (-81 :: Int) `shouldBe` HS.square 81
         it "square positive integer" $ do
-            HS.square (HS.square 2) `shouldBe` 16
-            HS.square 9 `shouldBe` 81
+            HS.square (HS.square 2 :: Int) `shouldBe` 16
+            HS.square (9 :: Int) `shouldBe` 81
         it "(3,4,5) is     a triplet" $ HS.isTriple 3 4 5 `shouldBe` True
         it "(3,4,6) is NOT a triplet" $ HS.isTriple 3 4 6 `shouldBe` False
         it "quickcheck: HS.applyXorCipher (HS.applyXorCipher s k) k == s"
@@ -101,19 +101,19 @@ prop_pTriples = forAll pTripleVals $ \(a, b, c) -> QCM.monadicIO $ do
 
 prop_cppApplyXorCipher :: Property
 prop_cppApplyXorCipher = forAll arbitrary $ \s0 -> QCM.monadicIO $ do
-    let key = C.pack "some string key 1234"
+    let key = BS.pack "some string key 1234"
     s1 <- QCM.run $ CPP.applyXorCipher s0 key
     s2 <- QCM.run $ CPP.applyXorCipher s1 key
     QCM.assert $ s2 == s0
 
 prop_hsApplyXorCipher :: Property
 prop_hsApplyXorCipher = forAll arbitrary $ \s -> QCM.monadicIO $ do
-    let key = C.pack "some string key 1234"
+    let key = BS.pack "some string key 1234"
     QCM.assert $ HS.applyXorCipher (HS.applyXorCipher s key) key == s
 
 prop_applyXorCipher :: Property
 prop_applyXorCipher = forAll arbitrary $ \s -> QCM.monadicIO $ do
-    let key = C.pack "some string key 1234"
+    let key = BS.pack "some string key 1234"
     s1 <- QCM.run $ CPP.applyXorCipher s key
     QCM.assert $ s1 == HS.applyXorCipher s key
 

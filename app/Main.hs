@@ -3,9 +3,8 @@ module Main where
 import qualified InlineCPP                     as CPP
 import qualified HsLib                         as HS
 import qualified Data.ByteString.Char8         as C
-import           Text.Printf                    ( printf )
-import           Data.Foldable                  ( for_ )
-import           Numeric                        ( showHex )
+import           Text.Printf                              ( printf )
+import           Data.Foldable                            ( for_ )
 
 main :: IO ()
 main = do
@@ -15,7 +14,7 @@ main = do
     cppSquare   <- CPP.square 3
     isCppTriple <- CPP.isTriple 3 4 5
     putStrLn $ "CPP.square 3: " ++ show cppSquare
-    putStrLn $ " HS.square 3: " ++ show (HS.square 3)
+    putStrLn $ " HS.square 3: " ++ show (HS.square 3 :: Int)
     putStrLn $ "CPP.isTriple 3 4 5: " ++ show isCppTriple
     putStrLn $ " HS.isTriple 3 4 5: " ++ show (HS.isTriple 3 4 5)
 
@@ -25,8 +24,8 @@ main = do
     putStrLn $ "sum " ++ show xs ++ " = " ++ show x
 
     -- example getting a cpp created list 
-    xs <- CPP.rangeList 10
-    putStrLn $ "rangeList 10 = " ++ show xs ++ "\n"
+    ys <- CPP.rangeList 10
+    putStrLn $ "rangeList 10 = " ++ show ys ++ "\n"
 
     -- validate calling CPP.applyXorCipher with std::cout
     -- interesting way to quickly test the cpp code
@@ -44,13 +43,11 @@ main = do
 
     -- call HS.applyXorCipher twice
     putStrLn ""
-    let s1  = C.pack "String to cipher."
-        key = C.pack "my secret key"
-        s2  = HS.applyXorCipher s1 key
-        s3  = HS.applyXorCipher s2 key
+    let s2' = HS.applyXorCipher s1 key
+        s3' = HS.applyXorCipher s2 key
     putStrLn $ "input string   = " ++ show s1
-    putStrLn $ "encoded string from hs = " ++ show s2
-    putStrLn $ "decoded string from hs = " ++ show s3
+    putStrLn $ "encoded string from hs = " ++ show s2'
+    putStrLn $ "decoded string from hs = " ++ show s3'
 
     -- call  Haskell code-point -> utf8 and utf8 to code-point
     putStrLn "\nHaskell encoding"

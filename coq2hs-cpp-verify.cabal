@@ -1,79 +1,67 @@
-cabal-version: 1.12
-name: coq2hs-cpp-verify
-version: 0.1.0.0
-license: BSD3
-license-file: LICENSE
-copyright: Copyright (c) 2019 Roy Crippen
-maintainer: roycrippen@gmail.com
-author: Roy Crippen
-homepage: https://github.com/roycrippen/coq2hs-cpp-verify#readme
-bug-reports: https://github.com/roycrippen/coq2hs-cpp-verify/issues
-synopsis: Verify equivalence betweeen hs functions and cpp functions
-description:
-    Please see the README on GitHub at <https://github.com/roycrippen/coq2hs-cpp-verify#readme>
-category: Coq Haskell C Specification
-build-type: Simple
-extra-source-files:
-    README.md
+cabal-version:         1.12
+name:                  coq2hs-cpp-verify
+version:               0.1.0.0
+license:               BSD3
+license-file:          LICENSE
+copyright:             Copyright (c) 2019 Roy Crippen
+maintainer:            roycrippen@gmail.com
+author:                Roy Crippen
+homepage:              https://github.com/roycrippen/coq2hs-cpp-verify#readme
+bug-reports:           https://github.com/roycrippen/coq2hs-cpp-verify/issues
+synopsis:              Verify equivalence betweeen hs functions and cpp functions
+description:           Compare functions implemented in Haskell and C++.
+category:              Coq Haskell C Specification
+build-type:            Simple
+extra-source-files:    README.md
 
 source-repository head
-    type: git
-    location: https://github.com/roycrippen/coq2hs-cpp-verify
+    type:                   git
+    location:               https://github.com/roycrippen/coq2hs-cpp-verify
 
 library
-    exposed-modules:
-        InlineCPP
-        HsLib
-    cc-options: -Wall -Werror
-    hs-source-dirs: src
-    other-modules:
-        Paths_coq2hs_cpp_verify
-    default-language: Haskell2010
-    extra-libraries:
-        stdc++
-    ghc-options: -optc-std=c++11
-    build-depends:
-        base >=4.7 && <5,
-        inline-c-cpp >=0.3.0.1,
-        bytestring -any,
-        text -any,
-        vector -any
+    hs-source-dirs:         src
+    exposed-modules:        InlineCPP
+                            HsLib
+    default-language:       Haskell2010
+    extra-libraries:        stdc++
+    ghc-options:            -Wall -optc-std=c++11
+    cc-options:             -Wall -Werror
+    other-modules:          Paths_coq2hs_cpp_verify
+    build-depends:          base >=4.7 && <5
+                          , inline-c-cpp >=0.3.0.1
+                          , bytestring -any
+                          , text -any
+                          , vector -any
 
 executable coq2hs-cpp-verify
-    main-is: Main.hs
-    cc-options: -Wall -Werror
-    hs-source-dirs: app
-    other-modules:
-        Paths_coq2hs_cpp_verify
-    default-language: Haskell2010
-    extra-libraries:
-        stdc++
-    ghc-options: -threaded -rtsopts -with-rtsopts=-N -optc-std=c++11
-    build-depends:
-        base >=4.7 && <5,
-        coq2hs-cpp-verify -any,
-        inline-c-cpp -any,
-        bytestring -any,
-        text -any,
-        vector -any
+    hs-source-dirs:         app
+    main-is:                Main.hs
+    default-language:       Haskell2010
+    extra-libraries:        stdc++
+    ghc-options:            -Wall -optc-std=c++11
+    cc-options:             -Wall -Werror
+    other-modules:          Paths_coq2hs_cpp_verify
+    build-depends:          base >=4.7 && <5
+                          , coq2hs-cpp-verify -any
+                          , inline-c-cpp -any
+                          , bytestring -any
+                          , text -any
+                          , vector -any
 
 test-suite coq2hs-cpp-verify-test
-    type: exitcode-stdio-1.0
-    main-is: Spec.hs
-    cc-options: -Wall -Werror
     hs-source-dirs: test
-    other-modules:
-        Paths_coq2hs_cpp_verify
-    default-language: Haskell2010
-    extra-libraries:
-        stdc++
-    ghc-options: -threaded -rtsopts -with-rtsopts=-N -optc-std=c++11
-    build-depends:
-        base >=4.7 && <5,
-        coq2hs-cpp-verify -any,
-        bytestring -any,
-        text -any,
-        hspec -any,
-        QuickCheck -any,
-        quickcheck-instances -any,
-        quickcheck-unicode -any
+    main-is: Spec.hs
+    type: exitcode-stdio-1.0
+    default-language:       Haskell2010
+    extra-libraries:        stdc++
+    ghc-options:            -Wall -optc-std=c++11
+    cc-options:             -Wall -Werror
+    other-modules:          Paths_coq2hs_cpp_verify
+    build-depends:          base >=4.7 && <5
+                          , coq2hs-cpp-verify -any
+                          , bytestring -any
+                          , text -any
+                          , hspec -any
+                          , QuickCheck -any
+                          , quickcheck-instances -any
+                          , quickcheck-unicode -any
